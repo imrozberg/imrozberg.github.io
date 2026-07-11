@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0f0a">
+<title>Happy Birthday, Imroz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0a0f0a;
+    --panel:#10150f;
+    --panel-2:#161c14;
+    --line: rgba(169,232,106,0.18);
+    --crystal:#a9e86a;
+    --crystal-glow:#d4ffa3;
+    --hazmat:#e8b023;
+    --rust:#a8452f;
+    --aura:#7fb8ff;
+    --aura-glow:#c3e0ff;
+    --bone:#ede7d3;
+    --bone-dim:#93917f;
+    --ink:#050603;
+    --nav-h: 58px;
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth; max-width:100%;}
+  body{
+    margin:0;
+    background:var(--void);
+    color:var(--bone);
+    font-family:'Work Sans', sans-serif;
+    overflow-x:hidden;
+    max-width:100vw;
+    padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 16px);
+  }
+
+  ::selection{ background:var(--crystal); color:var(--ink); }
+  a, button, input{ font-family:inherit; }
+  button{ -webkit-appearance:none; appearance:none; }
+  img, svg{ max-width:100%; }
+
+  .display{ font-family:'Big Shoulders Display', sans-serif; }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    font-size:0.68rem;
+    color:var(--crystal);
+    opacity:0.9;
+  }
+
+  section{
+    position:relative;
+    padding:5rem 1.5rem;
+    max-width:1000px;
+    margin:0 auto;
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity 0.7s ease, transform 0.7s ease;
+  }
+  section.in-view{ opacity:1; transform:none; }
+  #hero{ opacity:1; transform:none; }
+  @media (max-width:640px){
+    section{ padding:3rem 1.1rem; }
+  }
+
+  .divider{
+    max-width:1000px;
+    margin:0 auto;
+    border:none;
+    border-top:1px dashed var(--line);
+  }
+
+  /* ---------- INTRO SPLASH ---------- */
+  #splash{
+    position:fixed;
+    inset:0;
+    background:var(--void);
+    z-index:200;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:0.8rem;
+    transition:opacity 0.7s ease, visibility 0.7s ease;
+  }
+  #splash.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+  .splash-ep{ font-family:'IBM Plex Mono',monospace; color:var(--crystal); letter-spacing:0.3em; font-size:0.75rem; }
+  .splash-title{
+    font-family:'Big Shoulders Display', sans-serif;
+    text-transform:uppercase;
+    font-size:clamp(1.6rem,7vw,3rem);
+    color:var(--bone);
+    letter-spacing:0.02em;
+    text-align:center;
+    padding:0 1rem;
+  }
+  .splash-bar{
+    width:min(240px, 60vw);
+    height:3px;
+    background:var(--panel-2);
+    border-radius:2px;
+    overflow:hidden;
+    margin-top:0.6rem;
+  }
+  .splash-bar-fill{
+    height:100%; width:0%;
+    background:linear-gradient(90deg, var(--crystal), var(--aura));
+    animation:splash-load 1.6s ease forwards;
+  }
+  @keyframes splash-load{ to{ width:100%; } }
+
+  /* ---------- HERO ---------- */
+  #hero{
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:2rem 1.2rem;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .vapor{
+    position:absolute;
+    bottom:-10%;
+    width:40vw;
+    max-width:420px;
+    height:70vh;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(169,232,106,0.10) 0%, rgba(169,232,106,0) 70%);
+    filter:blur(10px);
+    animation:rise 14s ease-in-out infinite;
+  }
+  .vapor.v1{ left:5%; animation-delay:0s;}
+  .vapor.v2{ left:60%; animation-delay:4s; height:60vh; opacity:0.8;}
+  .vapor.v3{ left:30%; animation-delay:8s; height:50vh; opacity:0.6;}
+
+  @keyframes rise{
+    0%{ transform:translateY(10%) scale(1); opacity:0.4;}
+    50%{ transform:translateY(-40%) scale(1.15); opacity:0.9;}
+    100%{ transform:translateY(-90%) scale(1); opacity:0;}
+  }
+
+  .case-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.65rem;
+    letter-spacing:0.2em;
+    color:var(--bone-dim);
+    margin-top:0.8rem;
+  }
+
+  .hero-title{
+    font-size:clamp(2.3rem, 9vw, 5.5rem);
+    line-height:0.95;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+    color:var(--bone);
+    margin:0.6rem 0 0;
+    font-weight:700;
+  }
+
+  .tiles-row{
+    display:flex;
+    gap:0.5rem;
+    margin-top:2rem;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  .tile{
+    --tile-size: clamp(50px, 15vw, 84px);
+    width:var(--tile-size);
+    height:var(--tile-size);
+    border:1px solid var(--line);
+    background:var(--panel-2);
+    border-radius:6px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    position:relative;
+    user-select:none;
+  }
+  .tile:hover, .tile:focus-visible, .tile.open{
+    background:var(--crystal);
+    transform:translateY(-6px) scale(1.04);
+    box-shadow:0 12px 28px rgba(169,232,106,0.25);
+    outline:none;
+  }
+  .tile:active{ transform:scale(0.95); }
+  .tile:hover .tile-num, .tile:hover .tile-name,
+  .tile.open .tile-num, .tile.open .tile-name,
+  .tile:focus-visible .tile-num, .tile:focus-visible .tile-name{
+    color:var(--ink);
+  }
+  .tile-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.55rem;
+    align-self:flex-start;
+    margin:4px 0 0 6px;
+    color:var(--bone-dim);
+  }
+  .tile-sym{
+    font-family:'Big Shoulders Display', sans-serif;
+    font-weight:700;
+    font-size:clamp(1.3rem, 5vw, 2rem);
+    color:var(--crystal-glow);
+    line-height:1;
+  }
+  .tile:hover .tile-sym, .tile.open .tile-sym, .tile:focus-visible .tile-sym{ color:var(--ink); }
+  .tile-name{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.42rem;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--bone-dim);
+    margin-bottom:4px;
+  }
+
+  .trait-strip{
+    margin-top:1rem;
+    min-height:1.4rem;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    color:var(--crystal-glow);
+    letter-spacing:0.03em;
+    padding:0 1rem;
+  }
+
+  .hero-sub{
+    margin-top:1.6rem;
+    color:var(--bone-dim);
+    font-size:0.92rem;
+    max-width:420px;
+  }
+
+  .scroll-cue{
+    margin-top:2.2rem;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.62rem;
+    letter-spacing:0.3em;
+    color:var(--bone-dim);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+  }
+  .scroll-cue .arrow{
+    width:1px; height:22px; background:var(--bone-dim);
+    animation:pulse-arrow 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse-arrow{ 0%,100%{opacity:0.2;} 50%{opacity:0.9;} }
+
+  /* ---------- SECTION HEADERS ---------- */
+  .sec-head{
+    display:flex;
+    align-items:baseline;
+    gap:0.7rem;
+    margin-bottom:1.8rem;
+    flex-wrap:wrap;
+  }
+  .sec-num{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--bone-dim);
+    font-size:0.78rem;
+  }
+  .sec-title{
+    font-family:'Big Shoulders Display', sans-serif;
+    text-transform:uppercase;
+    font-size:clamp(1.6rem, 6vw, 2.6rem);
+    color:var(--crystal-glow);
+    letter-spacing:0.02em;
+    font-weight:700;
+    margin:0;
+  }
+  .sec-title.aura{ color:var(--aura-glow); }
+
+  /* ---------- PANELS ---------- */
+  .panel{
+    border:1px solid var(--line);
+    background:var(--panel);
+    border-radius:8px;
+    padding:1.8rem;
+    position:relative;
+    max-width:100%;
+  }
+  @media (max-width:640px){ .panel{ padding:1.3rem; } }
+
+  .panel-tag{
+    position:absolute;
+    top:-13px;
+    right:20px;
+    color:var(--ink);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.62rem;
+    letter-spacing:0.14em;
+    padding:4px 10px;
+    border-radius:3px;
+    transform:rotate(3deg);
+    font-weight:600;
+  }
+  .panel-tag.case{ background:var(--hazmat); }
+  .panel-tag.preview{ background:var(--aura); }
+
+  .field-row{
+    display:grid;
+    grid-template-columns:170px 1fr;
+    gap:1rem;
+    padding:0.85rem 0;
+    border-bottom:1px dashed var(--line);
+  }
+  .field-row:last-child{ border-bottom:none; }
+  .field-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.08em;
+    color:var(--crystal);
+    text-transform:uppercase;
+  }
+  .field-value{ color:var(--bone); font-size:0.96rem; }
+  @media (max-width:600px){
+    .field-row{ grid-template-columns:1fr; gap:0.3rem; }
+  }
+
+  /* ---------- METERS ---------- */
+  .meters{ display:flex; flex-direction:column; gap:1.6rem; }
+  .meter-label{
+    display:flex;
+    justify-content:space-between;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    letter-spacing:0.1em;
+    color:var(--bone-dim);
+    margin-bottom:0.6rem;
+    text-transform:uppercase;
+  }
+  .meter-bar{
+    height:16px;
+    background:var(--void);
+    border:1px solid var(--line);
+    border-radius:4px;
+    overflow:hidden;
+  }
+  .meter-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--crystal) 0%, var(--crystal-glow) 100%);
+    box-shadow:0 0 20px rgba(169,232,106,0.5);
+    transition:width 2s cubic-bezier(.16,.9,.3,1);
+  }
+  .meter-fill.aura{
+    background:linear-gradient(90deg, var(--aura) 0%, var(--aura-glow) 100%);
+    box-shadow:0 0 20px rgba(127,184,255,0.5);
+  }
+  .meter-caption{ margin-top:1rem; color:var(--bone-dim); font-size:0.88rem; font-style:italic; }
+
+  /* ---------- RADAR / STATS ---------- */
+  .radar-block{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:1.6rem;
+    text-align:center;
+  }
+  .radar-svg-wrap{
+    width:100%;
+    max-width:300px;
+    margin:0 auto;
+  }
+  .radar-svg-wrap svg{ width:100%; height:auto; display:block; overflow:visible; }
+  .radar-label-name{ font-family:'IBM Plex Mono',monospace; font-size:8px; fill:#a8a48f; text-transform:uppercase; letter-spacing:0.02em; }
+  .radar-label-val{ font-family:'IBM Plex Mono',monospace; font-size:9px; fill:#c3e0ff; font-weight:600; }
+  .radar-note{ max-width:480px; color:var(--bone-dim); font-size:0.92rem; line-height:1.7; }
+  .radar-note strong{ color:var(--aura-glow); font-family:'Big Shoulders Display'; text-transform:uppercase; letter-spacing:0.02em; }
+  @media (min-width:760px){
+    .radar-block{ flex-direction:row; align-items:center; text-align:left; gap:2.2rem; }
+    .radar-note{ text-align:left; }
+  }
+
+  /* ---------- BUTTONS ---------- */
+  .cook-btn, .cta-btn{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    font-size:0.82rem;
+    background:transparent;
+    border:1px solid var(--crystal);
+    color:var(--crystal);
+    padding:0.85rem 1.7rem;
+    border-radius:4px;
+    cursor:pointer;
+    transition:background 0.25s ease, color 0.25s ease, transform 0.15s ease;
+    min-height:46px;
+  }
+  .cook-btn:hover, .cta-btn:hover{ background:var(--crystal); color:var(--ink); }
+  .cta-btn.aura{ border-color:var(--aura); color:var(--aura); }
+  .cta-btn.aura:hover{ background:var(--aura); color:var(--ink); }
+  .cook-btn:active, .cta-btn:active{ transform:scale(0.96); }
+  .cook-btn:focus-visible, .cta-btn:focus-visible{ outline:2px solid var(--hazmat); outline-offset:3px; }
+  .cook-btn:disabled{ opacity:0.6; cursor:default; }
+
+  /* ---------- LAB ---------- */
+  .lab-wrap{ display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .flask{ width:110px; height:140px; position:relative; margin-bottom:1.8rem; }
+  .flask svg{ width:100%; height:100%; overflow:visible; }
+  .liquid{ transform-origin:center bottom; }
+  .flask.brewing .liquid{ animation:slosh 1.2s ease-in-out infinite; }
+  @keyframes slosh{ 0%,100%{ transform:scaleY(1) translateY(0); } 50%{ transform:scaleY(1.04) translateY(-3px); } }
+  .bubble{ position:absolute; border-radius:50%; background:var(--crystal-glow); opacity:0; }
+  .flask.brewing .bubble{ animation:bubble-up 1.8s ease-in infinite; }
+  @keyframes bubble-up{ 0%{ opacity:0; transform:translateY(0) scale(0.4); } 15%{ opacity:0.9; } 100%{ opacity:0; transform:translateY(-65px) scale(1); } }
+
+  .readout{
+    margin-top:2rem;
+    max-width:560px;
+    border-left:2px solid var(--crystal);
+    padding-left:1.1rem;
+    text-align:left;
+    font-size:1rem;
+    line-height:1.7;
+    color:var(--bone);
+    min-height:2rem;
+  }
+  .readout.aura{ border-left-color:var(--aura); }
+  .readout .cursor{ display:inline-block; width:8px; height:1.1em; background:var(--crystal); vertical-align:text-bottom; animation:blink 1s step-end infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  /* ---------- TRANSMISSION ---------- */
+  .transmit-form{ display:flex; gap:0.6rem; flex-wrap:wrap; margin-top:1.2rem; }
+  .wish-input{
+    flex:1 1 240px;
+    min-width:0;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:0.85rem 1rem;
+    color:var(--bone);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem;
+    min-height:46px;
+  }
+  .wish-input:focus-visible{ outline:2px solid var(--aura); outline-offset:2px; }
+
+  /* ---------- CAKE ---------- */
+  .cake-wrap{ display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .cake{ position:relative; width:190px; margin-bottom:1.8rem; }
+  .candle{ position:absolute; top:-34px; width:6px; height:34px; background:var(--hazmat); border-radius:2px; }
+  .candle::after{
+    content:""; position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+    width:8px; height:14px;
+    background:radial-gradient(ellipse at bottom, #ffd977 0%, var(--rust) 90%);
+    border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+    transition:opacity 0.4s ease, transform 0.4s ease;
+    filter:drop-shadow(0 0 6px rgba(232,176,35,0.7));
+  }
+  .cake.blown .candle::after{ opacity:0; transform:translateX(-50%) scale(0.2); }
+  .cake-tier{ width:100%; height:56px; background:var(--panel-2); border:1px solid var(--line); border-radius:6px; margin-top:6px; }
+  .cake-tier.top{ width:70%; margin:6px auto 0; height:44px;}
+  .smoke{ position:absolute; top:-40px; width:4px; height:20px; opacity:0; background:linear-gradient(to top, rgba(237,231,211,0.5), transparent); border-radius:50%; }
+  .cake.blown .smoke{ animation:puff 1.4s ease-out forwards; }
+  @keyframes puff{ 0%{ opacity:0.8; transform:translateY(0) scale(1);} 100%{ opacity:0; transform:translateY(-30px) scale(2.5);} }
+
+  #fx-canvas{ position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:55; }
+
+  /* ---------- NEXT EPISODE PREVIEW ---------- */
+  .nextep-list{ color:var(--bone); line-height:1.9; padding-left:1.2rem; margin:0.8rem 0 0; }
+  .nextep-list li{ margin-bottom:0.3rem; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ text-align:center; padding:3.5rem 1.4rem 3rem; color:var(--bone-dim); }
+  .footer-line{
+    font-family:'Big Shoulders Display', sans-serif;
+    font-size:clamp(1.3rem, 5vw, 2rem);
+    color:var(--bone);
+    text-transform:uppercase;
+    margin-bottom:0.6rem;
+  }
+  .fine-print{ font-family:'IBM Plex Mono', monospace; font-size:0.68rem; letter-spacing:0.08em; opacity:0.6; }
+
+  .footer-actions{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:0.6rem;
+    margin-top:2rem;
+  }
+  .ghost-btn{
+    background:none;
+    border:1px dashed var(--line);
+    color:var(--bone-dim);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.68rem;
+    letter-spacing:0.1em;
+    padding:0.6rem 1.1rem;
+    border-radius:20px;
+    cursor:pointer;
+    transition:color 0.2s ease, border-color 0.2s ease;
+    min-height:40px;
+  }
+  .ghost-btn:hover{ color:var(--crystal); border-color:var(--crystal); }
+  .ghost-btn:focus-visible{ outline:2px solid var(--hazmat); outline-offset:2px; }
+
+  .confession{
+    margin-top:1.4rem;
+    font-family:'Big Shoulders Display', sans-serif;
+    font-size:clamp(1.8rem, 8vw, 4rem);
+    color:var(--crystal-glow);
+    text-shadow:0 0 30px rgba(169,232,106,0.5);
+    opacity:0;
+    transform:scale(0.9);
+    transition:opacity 0.5s ease, transform 0.5s ease;
+    text-transform:uppercase;
+  }
+  .confession.show{ opacity:1; transform:scale(1); }
+
+  /* ---------- ACHIEVEMENT TOASTS ---------- */
+  .toast-container{
+    position:fixed;
+    top:14px; right:14px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    z-index:100;
+    max-width:250px;
+  }
+  @media (max-width:640px){
+    .toast-container{ left:10px; right:10px; top:10px; max-width:none; align-items:center; }
+  }
+  .toast{
+    background:var(--panel-2);
+    border:1px solid var(--aura);
+    color:var(--bone);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.68rem;
+    letter-spacing:0.04em;
+    padding:10px 14px;
+    border-radius:6px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.45);
+    opacity:0;
+    transform:translateY(-10px);
+    animation:toast-in 0.4s ease forwards, toast-out 0.4s ease forwards 3.2s;
+  }
+  .toast b{
+    color:var(--aura-glow);
+    display:block;
+    font-family:'Big Shoulders Display', sans-serif;
+    font-size:0.82rem;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    margin-bottom:2px;
+  }
+  @keyframes toast-in{ to{ opacity:1; transform:translateY(0);} }
+  @keyframes toast-out{ to{ opacity:0; transform:translateY(-10px);} }
+
+  /* ---------- NAV DOCK ---------- */
+  .nav-dock{
+    position:fixed;
+    bottom:0; left:0; right:0;
+    display:flex;
+    gap:6px;
+    overflow-x:auto;
+    padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+    background:rgba(10,15,10,0.94);
+    backdrop-filter:blur(8px);
+    border-top:1px solid var(--line);
+    z-index:90;
+    scrollbar-width:none;
+    height:var(--nav-h);
+  }
+  .nav-dock::-webkit-scrollbar{ display:none; }
+  .nav-pill{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.66rem;
+    letter-spacing:0.06em;
+    color:var(--bone-dim);
+    background:var(--panel-2);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:0 12px;
+    height:100%;
+    white-space:nowrap;
+    cursor:pointer;
+    transition:background 0.2s ease, color 0.2s ease, border-color .2s ease;
+  }
+  .nav-pill.active{ background:var(--crystal); color:var(--ink); border-color:var(--crystal); }
+  .nav-pill:focus-visible{ outline:2px solid var(--hazmat); outline-offset:2px; }
+  .nav-pill.counter{ background:var(--void); border-color:var(--aura); color:var(--aura-glow); cursor:default; }
+  .nav-code{ opacity:0.75; }
+  @media (max-width:400px){
+    .nav-label{ display:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+    html{ scroll-behavior:auto; }
+    section{ opacity:1 !important; transform:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <div class="splash-ep mono">EP.00 &mdash; LOADING</div>
+  <div class="splash-title display">Another Year Stronger</div>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
+
+<canvas id="fx-canvas"></canvas>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<!-- ============ HERO ============ -->
+<section id="hero">
+  <div class="vapor v1"></div>
+  <div class="vapor v2"></div>
+  <div class="vapor v3"></div>
+
+  <div class="eyebrow">Confidential &mdash; Birthday Division</div>
+  <div class="case-tag mono">EP.00 &mdash; THE BEGINNING</div>
+  <h1 class="hero-title display">Happy Birthday</h1>
+
+  <div class="tiles-row" id="tiles-row"></div>
+  <div class="trait-strip mono" id="trait-strip">tap an element to run an analysis</div>
+
+  <p class="hero-sub">Filed under: one more trip around the sun, purity uncompromised, power level rising.</p>
+
+  <div class="scroll-cue">
+    <span>SCROLL</span>
+    <span class="arrow"></span>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============ DOSSIER ============ -->
+<section id="dossier">
+  <div class="sec-head">
+    <span class="sec-num mono">EP.01</span>
+    <h2 class="sec-title">Subject Profile</h2>
+  </div>
+
+  <div class="panel">
+    <div class="panel-tag case mono">Exhibit A</div>
+    <div class="field-row">
+      <div class="field-label mono">Name</div>
+      <div class="field-value">Imroz</div>
+    </div>
+    <div class="field-row">
+      <div class="field-label mono">Status</div>
+      <div class="field-value">One year wiser, zero regrets filed</div>
+    </div>
+    <div class="field-row">
+      <div class="field-label mono">Known For</div>
+      <div class="field-value">Turning every rewatch into a full breakdown of Walter White's worst decisions</div>
+    </div>
+    <div class="field-row">
+      <div class="field-label mono">Also Known For</div>
+      <div class="field-value">Having strong, well-defended opinions about which anime arc is the best arc</div>
+    </div>
+    <div class="field-row">
+      <div class="field-label mono">Last Seen</div>
+      <div class="field-value">Arguing whether Season 5 or Season 5B hits harder</div>
+    </div>
+    <div class="field-row">
+      <div class="field-label mono">Threat Level</div>
+      <div class="field-value">Extremely likeable. Approach with cake.</div>
+    </div>
+    <div class="field-row">
+      <div class="field-label mono">Special Skill</div>
+      <div class="field-value">Making an ordinary Tuesday feel like a season finale</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============ PROTAGONIST STATS ============ -->
+<section id="stats">
+  <div class="sec-head">
+    <span class="sec-num mono">EP.02</span>
+    <h2 class="sec-title aura">Protagonist Stats</h2>
+  </div>
+
+  <div class="panel radar-block">
+    <div class="radar-svg-wrap">
+      <svg id="radar-svg" viewBox="0 0 300 300"></svg>
+    </div>
+    <div class="radar-note">
+      <strong>Character Sheet — Compiled By An Unbiased Narrator</strong><br><br>
+      Stat sheet for the main character of today's episode. Numbers are self-reported, fully verified, and not up for debate. Determination and Chaos Energy are maxed for a reason.
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============ QUALITY CONTROL ============ -->
+<section id="purity">
+  <div class="sec-head">
+    <span class="sec-num mono">EP.03</span>
+    <h2 class="sec-title">Quality Control</h2>
+  </div>
+
+  <div class="panel" id="meters-wrap">
+    <div class="meters">
+      <div>
+        <div class="meter-label"><span>Birthday Joy Purity</span><span id="purity-num">0%</span></div>
+        <div class="meter-bar"><div class="meter-fill" id="purity-fill"></div></div>
+      </div>
+      <div>
+        <div class="meter-label"><span>Protagonist Aura Output</span><span id="aura-num">0%</span></div>
+        <div class="meter-bar"><div class="meter-fill aura" id="aura-fill"></div></div>
+      </div>
+    </div>
+    <p class="meter-caption">Cooked low and slow, cut with absolutely nothing. Aura requires no suppression seal. Both approved for immediate consumption.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============ LAB ============ -->
+<section id="lab">
+  <div class="sec-head">
+    <span class="sec-num mono">EP.04</span>
+    <h2 class="sec-title">The Cook</h2>
+  </div>
+
+  <div class="lab-wrap">
+    <div class="flask" id="flask">
+      <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
+        <path d="M40 10 H60 V45 L82 100 A10 10 0 0 1 72 115 H28 A10 10 0 0 1 18 100 L40 45 Z"
+              fill="none" stroke="#a9e86a" stroke-width="2.5"/>
+        <clipPath id="flaskClip">
+          <path d="M40 10 H60 V45 L82 100 A10 10 0 0 1 72 115 H28 A10 10 0 0 1 18 100 L40 45 Z"/>
+        </clipPath>
+        <g clip-path="url(#flaskClip)">
+          <rect class="liquid" x="10" y="70" width="80" height="60" fill="#a9e86a" opacity="0.55"/>
+        </g>
+      </svg>
+      <div class="bubble" style="width:6px;height:6px;left:38px;bottom:20px;animation-delay:0s;"></div>
+      <div class="bubble" style="width:4px;height:4px;left:52px;bottom:25px;animation-delay:0.5s;"></div>
+      <div class="bubble" style="width:5px;height:5px;left:46px;bottom:15px;animation-delay:1s;"></div>
+    </div>
+
+    <button class="cook-btn" id="cook-btn">Initiate Cook</button>
+
+    <div class="readout mono" id="readout" style="display:none;"></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============ TRANSMISSION ============ -->
+<section id="transmission">
+  <div class="sec-head">
+    <span class="sec-num mono">EP.05</span>
+    <h2 class="sec-title aura">Transmission</h2>
+  </div>
+
+  <p style="color:var(--bone-dim); max-width:520px;">Type something for the record — a wish, a threat, a plan for more cake. Nothing leaves this page; it's not stored, sent, or synced anywhere.</p>
+
+  <div class="transmit-form">
+    <input id="wish-input" class="wish-input" type="text" maxlength="140" placeholder="e.g. may the wifi never lag mid-episode">
+    <button class="cta-btn aura" id="transmit-btn">Transmit</button>
+  </div>
+
+  <div class="readout mono aura" id="wish-readout" style="display:none;"></div>
+</section>
+
+<hr class="divider">
+
+<!-- ============ CAKE ============ -->
+<section id="cake-section">
+  <div class="sec-head">
+    <span class="sec-num mono">EP.06</span>
+    <h2 class="sec-title">One Last Burn</h2>
+  </div>
+
+  <div class="cake-wrap">
+    <div class="cake" id="cake">
+      <div class="candle" style="left:66px;"><div class="smoke" style="left:69px;"></div></div>
+      <div class="candle" style="left:92px;"><div class="smoke" style="left:95px;"></div></div>
+      <div class="candle" style="left:118px;"><div class="smoke" style="left:121px;"></div></div>
+      <div class="cake-tier"></div>
+      <div class="cake-tier top"></div>
+    </div>
+    <button class="cta-btn" id="blow-btn">Blow Out The Candles</button>
+    <p class="meter-caption" id="cake-msg" style="min-height:1.4rem; margin-top:1rem;"></p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============ NEXT EPISODE PREVIEW ============ -->
+<section id="nextep">
+  <div class="sec-head">
+    <span class="sec-num mono">EP.07</span>
+    <h2 class="sec-title aura">Next Time</h2>
+  </div>
+
+  <div class="panel">
+    <div class="panel-tag preview mono">Preview</div>
+    <div class="eyebrow" style="color:var(--aura);">To Be Continued</div>
+    <p class="display" style="font-size:clamp(1.4rem,5vw,2.1rem); margin:0.6rem 0 0; text-transform:uppercase; color:var(--bone);">Next time on: Imroz's Life</p>
+    <ul class="nextep-list">
+      <li>Our hero faces the ultimate final boss: Monday morning.</li>
+      <li>A mysterious slice of cake reappears in the fridge at midnight.</li>
+      <li>Will the rewatch count finally hit double digits? Almost certainly.</li>
+    </ul>
+    <p class="fine-print" style="margin-top:1rem;">Airing continuously, every day you choose to show up.</p>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ============ FOOTER ============ -->
+<footer id="footer">
+  <div class="footer-line display">Case Closed. Happy Birthday, Imroz.</div>
+  <p class="fine-print">No lab coats were harmed in the making of this page.</p>
+
+  <div class="footer-actions">
+    <button class="ghost-btn" id="confess-btn">Press to confess</button>
+    <button class="ghost-btn" id="share-btn">Share this page</button>
+    <button class="ghost-btn" id="ics-btn">Add birthday reminder</button>
+    <button class="ghost-btn" id="replay-btn">Replay intro</button>
+    <button class="ghost-btn" id="ambient-btn">Ambient: off</button>
+  </div>
+
+  <div class="confession" id="confession">Imroz. That's the name.</div>
+</footer>
+
+<!-- ============ QUICK-JUMP NAV ============ -->
+<nav class="nav-dock" id="nav-dock" aria-label="Quick section jump">
+  <div class="nav-pill counter" id="ach-counter" title="Achievements unlocked">
+    <span class="nav-code">&#9733;</span><span class="nav-label" id="ach-counter-label">0/5</span>
+  </div>
+  <button class="nav-pill" data-target="#hero"><span class="nav-code">00</span><span class="nav-label">Start</span></button>
+  <button class="nav-pill" data-target="#dossier"><span class="nav-code">01</span><span class="nav-label">Profile</span></button>
+  <button class="nav-pill" data-target="#stats"><span class="nav-code">02</span><span class="nav-label">Stats</span></button>
+  <button class="nav-pill" data-target="#purity"><span class="nav-code">03</span><span class="nav-label">QC</span></button>
+  <button class="nav-pill" data-target="#lab"><span class="nav-code">04</span><span class="nav-label">Lab</span></button>
+  <button class="nav-pill" data-target="#transmission"><span class="nav-code">05</span><span class="nav-label">Wish</span></button>
+  <button class="nav-pill" data-target="#cake-section"><span class="nav-code">06</span><span class="nav-label">Cake</span></button>
+  <button class="nav-pill" data-target="#nextep"><span class="nav-code">07</span><span class="nav-label">Next</span></button>
+</nav>
+
+<script>
+  function vibrate(ms){ if('vibrate' in navigator){ try{ navigator.vibrate(ms); }catch(e){} } }
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- SPLASH ----------
+  const splash = document.getElementById('splash');
+  window.addEventListener('load', () => {
+    setTimeout(() => { splash.classList.add('hide'); }, reducedMotion ? 200 : 1500);
+  });
+
+  // ---------- SCROLL REVEAL ----------
+  const revealTargets = Array.from(document.querySelectorAll('section')).filter(s => s.id !== 'hero');
+  if ('IntersectionObserver' in window){
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealTargets.forEach(el => revealObserver.observe(el));
+  } else {
+    revealTargets.forEach(el => el.classList.add('in-view'));
+  }
+
+  // ---------- ACHIEVEMENTS ----------
+  const unlocked = new Set();
+  const achTotal = 5;
+  const toastContainer = document.getElementById('toast-container');
+  const achLabel = document.getElementById('ach-counter-label');
+  function unlockAchievement(key, title){
+    if (unlocked.has(key)) return;
+    unlocked.add(key);
+    achLabel.textContent = unlocked.size + '/' + achTotal;
+    const el = document.createElement('div');
+    el.className = 'toast';
+    el.innerHTML = '<b>Achievement Unlocked</b>' + title;
+    toastContainer.appendChild(el);
+    setTimeout(() => el.remove(), 3800);
+    vibrate(25);
+  }
+
+  // ---------- ELEMENT TILES ----------
+  const letters = [
+    { sym:'I', num:1,  name:'Ingenious',  trait:'I — Ingenious. Always three steps ahead of the plot twist.' },
+    { sym:'M', num:12, name:'Magnetic',   trait:'M — Magnetic. The one who makes every hangout better.' },
+    { sym:'R', num:37, name:'Relentless', trait:'R — Relentless. Finishes what they start, no half measures.' },
+    { sym:'O', num:8,  name:'Original',   trait:'O — Original. Copies nobody, sets the trend instead.' },
+    { sym:'Z', num:30, name:'Zestful',    trait:'Z — Zestful. Brings the energy up wherever they walk in.' },
+  ];
+
+  const tilesRow = document.getElementById('tiles-row');
+  const traitStrip = document.getElementById('trait-strip');
+  const openedTiles = new Set();
+
+  letters.forEach((l) => {
+    const tile = document.createElement('button');
+    tile.className = 'tile';
+    tile.setAttribute('aria-label', l.name);
+    tile.innerHTML =
+      '<span class="tile-num mono">' + l.num + '</span>' +
+      '<span class="tile-sym">' + l.sym + '</span>' +
+      '<span class="tile-name mono">' + l.name + '</span>';
+    tile.addEventListener('click', () => {
+      document.querySelectorAll('.tile').forEach(t => t.classList.remove('open'));
+      tile.classList.add('open');
+      traitStrip.textContent = l.trait;
+      openedTiles.add(l.sym);
+      if (openedTiles.size === letters.length){
+        unlockAchievement('all-tiles', 'Analyzed All Elements');
+      }
+    });
+    tile.addEventListener('mouseenter', () => { traitStrip.textContent = l.trait; });
+    tilesRow.appendChild(tile);
+  });
+
+  // ---------- RADAR CHART ----------
+  const statsData = [
+    { label:'Determination',   value:97 },
+    { label:'Loyalty',         value:95 },
+    { label:'Charisma',        value:92 },
+    { label:'Reaction Speed',  value:88 },
+    { label:'Chaos Energy',    value:99 },
+    { label:'Plot Armor',      value:100 },
+  ];
+  const radarSvg = document.getElementById('radar-svg');
+  const cx = 150, cy = 150, maxR = 88, labelR = 122;
+  const n = statsData.length;
+
+  function pointAt(r, i){
+    const angle = (Math.PI/180) * (-90 + (360/n) * i);
+    return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
+  }
+
+  let radarMarkup = '';
+  [0.33, 0.66, 1].forEach(frac => {
+    const pts = [];
+    for (let i = 0; i < n; i++){
+      const p = pointAt(maxR * frac, i);
+      pts.push(p.x.toFixed(1) + ',' + p.y.toFixed(1));
+    }
+    radarMarkup += '<polygon points="' + pts.join(' ') + '" fill="none" stroke="rgba(127,184,255,0.18)" stroke-width="1"/>';
+  });
+  statsData.forEach((s, i) => {
+    const outer = pointAt(maxR, i);
+    radarMarkup += '<line x1="' + cx + '" y1="' + cy + '" x2="' + outer.x.toFixed(1) + '" y2="' + outer.y.toFixed(1) + '" stroke="rgba(127,184,255,0.18)" stroke-width="1"/>';
+
+    const lp = pointAt(labelR, i);
+    let anchor = 'middle';
+    if (lp.x < cx - 8) anchor = 'end';
+    else if (lp.x > cx + 8) anchor = 'start';
+
+    let dyName = 0, dyVal = 11;
+    if (Math.abs(lp.x - cx) < 8){
+      if (lp.y < cy){ dyName = 0; dyVal = -11; }
+    }
+
+    radarMarkup += '<text x="' + lp.x.toFixed(1) + '" y="' + lp.y.toFixed(1) + '" text-anchor="' + anchor + '">' +
+      '<tspan class="radar-label-name" x="' + lp.x.toFixed(1) + '" dy="' + dyName + '">' + s.label + '</tspan>' +
+      '<tspan class="radar-label-val" x="' + lp.x.toFixed(1) + '" dy="' + dyVal + '">' + s.value + '</tspan>' +
+      '</text>';
+  });
+  const collapsedPts = statsData.map(() => cx + ',' + cy).join(' ');
+  radarMarkup += '<polygon id="stat-poly" points="' + collapsedPts + '" fill="rgba(127,184,255,0.28)" stroke="#7fb8ff" stroke-width="2"/>';
+  statsData.forEach((s, i) => {
+    radarMarkup += '<circle class="stat-dot" data-i="' + i + '" cx="' + cx + '" cy="' + cy + '" r="3" fill="#c3e0ff"/>';
+  });
+  radarSvg.innerHTML = radarMarkup;
+
+  let radarAnimated = false;
+  function animateRadar(){
+    const dots = radarSvg.querySelectorAll('.stat-dot');
+    const poly = document.getElementById('stat-poly');
+    const targets = statsData.map((s, i) => pointAt(maxR * (s.value / 100), i));
+
+    if (reducedMotion){
+      poly.setAttribute('points', targets.map(p => p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' '));
+      dots.forEach((d, i) => { d.setAttribute('cx', targets[i].x.toFixed(1)); d.setAttribute('cy', targets[i].y.toFixed(1)); });
+      return;
+    }
+
+    const duration = 1000;
+    const start = performance.now();
+    function frame(now){
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const pts = targets.map(p => ({ x: cx + (p.x - cx) * eased, y: cy + (p.y - cy) * eased }));
+      poly.setAttribute('points', pts.map(p => p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' '));
+      dots.forEach((d, i) => { d.setAttribute('cx', pts[i].x.toFixed(1)); d.setAttribute('cy', pts[i].y.toFixed(1)); });
+      if (t < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !radarAnimated){
+        radarAnimated = true;
+        animateRadar();
+      }
+    });
+  }, { threshold: 0.35 });
+  statsObserver.observe(document.getElementById('stats'));
+
+  // ---------- METERS ----------
+  const metersWrap = document.getElementById('meters-wrap');
+  const purityFill = document.getElementById('purity-fill');
+  const purityNum = document.getElementById('purity-num');
+  const auraFill = document.getElementById('aura-fill');
+  const auraNum = document.getElementById('aura-num');
+  let metersDone = false;
+
+  function countUp(el, target){
+    if (reducedMotion){ el.textContent = target.toFixed(1) + '%'; return; }
+    let current = 0;
+    function step(){
+      current += (target - current) * 0.12;
+      if (target - current < 0.3) current = target;
+      el.textContent = current.toFixed(1) + '%';
+      if (current < target) requestAnimationFrame(step);
+    }
+    step();
+  }
+
+  const metersObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !metersDone){
+        metersDone = true;
+        purityFill.style.width = '99.9%';
+        auraFill.style.width = '100%';
+        countUp(purityNum, 99.9);
+        countUp(auraNum, 100);
+      }
+    });
+  }, { threshold: 0.4 });
+  metersObserver.observe(metersWrap);
+
+  // ---------- TYPEWRITER ----------
+  function typeWriter(text, el, cursorClass, onDone){
+    el.innerHTML = '<span class="cursor ' + (cursorClass||'') + '"></span>';
+    let i = 0;
+    const speed = 16;
+    function tick(){
+      if (i <= text.length){
+        el.innerHTML = text.slice(0, i) + '<span class="cursor ' + (cursorClass||'') + '"></span>';
+        i++;
+        setTimeout(tick, speed);
+      } else {
+        el.innerHTML = text;
+        if (onDone) onDone();
+      }
+    }
+    tick();
+  }
+
+  // ---------- LAB / COOK ----------
+  const flask = document.getElementById('flask');
+  const cookBtn = document.getElementById('cook-btn');
+  const readout = document.getElementById('readout');
+  const cookMessage = "Every great story needs someone willing to go all in, and that's always been you. Here's to another year of that same relentless energy Walter brought to chemistry, minus the RV, minus the danger, minus the questionable decisions. Just the ambition, the loyalty to people who matter, and the refusal to settle for a mediocre plan when a great one is possible. Happy birthday, Imroz. May this year run as clean as a perfectly executed final act.";
+
+  let cooking = false;
+  cookBtn.addEventListener('click', () => {
+    if (cooking) return;
+    cooking = true;
+    flask.classList.add('brewing');
+    cookBtn.textContent = 'Synthesizing...';
+    cookBtn.disabled = true;
+
+    setTimeout(() => {
+      flask.classList.remove('brewing');
+      cookBtn.textContent = 'Batch Complete';
+      readout.style.display = 'block';
+      typeWriter(cookMessage, readout, '', () => {
+        unlockAchievement('cook-done', 'Batch Completed');
+      });
+    }, reducedMotion ? 200 : 2200);
+  });
+
+  // ---------- TRANSMISSION ----------
+  const wishInput = document.getElementById('wish-input');
+  const transmitBtn = document.getElementById('transmit-btn');
+  const wishReadout = document.getElementById('wish-readout');
+
+  function sendTransmission(){
+    const val = wishInput.value.trim();
+    if (!val) return;
+    wishReadout.style.display = 'block';
+    const line = 'TRANSMISSION RECEIVED: "' + val + '" — logged, encrypted with absolutely no encryption.';
+    typeWriter(line, wishReadout, 'aura', () => {
+      unlockAchievement('transmission', 'Transmission Sent');
+    });
+    wishInput.value = '';
+  }
+  transmitBtn.addEventListener('click', sendTransmission);
+  wishInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendTransmission(); });
+
+  // ---------- CAKE / FX CANVAS ----------
+  const cake = document.getElementById('cake');
+  const blowBtn = document.getElementById('blow-btn');
+  const cakeMsg = document.getElementById('cake-msg');
+
+  blowBtn.addEventListener('click', () => {
+    if (cake.classList.contains('blown')) return;
+    cake.classList.add('blown');
+    cakeMsg.textContent = 'Wish logged. Case closed. Happy birthday!';
+    burstConfetti();
+    vibrate([20, 40, 20]);
+    unlockAchievement('cake-blown', 'Flame Extinguished');
+  });
+
+  const canvas = document.getElementById('fx-canvas');
+  const ctx = canvas.getContext('2d');
+  function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  const colors = ['#a9e86a', '#d4ffa3', '#e8b023', '#ede7d3', '#7fb8ff'];
+
+  function burstConfetti(){
+    if (reducedMotion) return;
+    const pieces = [];
+    const count = 150;
+    for (let i = 0; i < count; i++){
+      pieces.push({
+        x: canvas.width/2 + (Math.random()-0.5)*120,
+        y: canvas.height*0.7,
+        vx: (Math.random()-0.5)*9,
+        vy: -Math.random()*11 - 4,
+        size: Math.random()*7+4,
+        color: colors[Math.floor(Math.random()*colors.length)],
+        rot: Math.random()*Math.PI,
+        vr: (Math.random()-0.5)*0.3,
+        shape: Math.random() > 0.5 ? 'shard' : 'square'
+      });
+    }
+    const lines = [];
+    const lineCount = 18;
+    for (let i = 0; i < lineCount; i++){
+      const angle = (Math.PI*2/lineCount) * i;
+      lines.push({ angle, len: 0, maxLen: 60 + Math.random()*40 });
+    }
+
+    let frame = 0;
+    const maxFrames = 150;
+    function animate(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      frame++;
+
+      if (frame < 20){
+        ctx.save();
+        ctx.translate(canvas.width/2, canvas.height*0.7);
+        ctx.globalAlpha = Math.max(0, 1 - frame/20);
+        lines.forEach(l => {
+          l.len = l.maxLen * (frame/20);
+          ctx.strokeStyle = '#ede7d3';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(l.angle)*10, Math.sin(l.angle)*10);
+          ctx.lineTo(Math.cos(l.angle)*(10+l.len), Math.sin(l.angle)*(10+l.len));
+          ctx.stroke();
+        });
+        ctx.restore();
+      }
+
+      let alive = frame < 20;
+      pieces.forEach(p => {
+        p.vy += 0.28;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vr;
+        if (p.y < canvas.height + 20) alive = true;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = Math.max(0, 1 - frame/maxFrames);
+        if (p.shape === 'shard'){
+          ctx.beginPath();
+          ctx.moveTo(0, -p.size);
+          ctx.lineTo(p.size*0.6, 0);
+          ctx.lineTo(0, p.size);
+          ctx.lineTo(-p.size*0.6, 0);
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+        }
+        ctx.restore();
+      });
+
+      if (alive && frame < maxFrames){
+        requestAnimationFrame(animate);
+      } else {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+      }
+    }
+    animate();
+  }
+
+  // ---------- CONFESSION EASTER EGG ----------
+  const confessBtn = document.getElementById('confess-btn');
+  const confession = document.getElementById('confession');
+  let confessed = false;
+  confessBtn.addEventListener('click', () => {
+    confessed = !confessed;
+    confession.classList.toggle('show', confessed);
+    confessBtn.textContent = confessed ? 'Retract statement' : 'Press to confess';
+  });
+
+  // ---------- SHARE ----------
+  const shareBtn = document.getElementById('share-btn');
+  shareBtn.addEventListener('click', async () => {
+    const shareData = {
+      title: 'Happy Birthday, Imroz!',
+      text: 'A little birthday page made for Imroz.',
+      url: location.href
+    };
+    if (navigator.share){
+      try{ await navigator.share(shareData); } catch(e){ /* cancelled, ignore */ }
+    } else if (navigator.clipboard){
+      try{
+        await navigator.clipboard.writeText(location.href);
+        const original = shareBtn.textContent;
+        shareBtn.textContent = 'Link copied!';
+        setTimeout(() => { shareBtn.textContent = original; }, 2000);
+      } catch(e){}
+    }
+  });
+
+  // ---------- ADD TO CALENDAR (.ics) ----------
+  document.getElementById('ics-btn').addEventListener('click', () => {
+    const now = new Date();
+    const next = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
+    const pad = (num) => String(num).padStart(2, '0');
+    const dateStr = next.getFullYear() + pad(next.getMonth()+1) + pad(next.getDate());
+    const stamp = now.toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
+
+    const ics = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Imroz Birthday Page//EN',
+      'BEGIN:VEVENT',
+      'UID:' + Date.now() + '@imroz-birthday-page',
+      'DTSTAMP:' + stamp,
+      'DTSTART;VALUE=DATE:' + dateStr,
+      'DTEND;VALUE=DATE:' + dateStr,
+      'SUMMARY:Imroz\'s Birthday',
+      'DESCRIPTION:Time to cook up another celebration.',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+
+    const blob = new Blob([ics], { type: 'text/calendar' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'imroz-birthday-reminder.ics';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // ---------- REPLAY INTRO ----------
+  document.getElementById('replay-btn').addEventListener('click', () => {
+    splash.classList.remove('hide');
+    const bar = splash.querySelector('.splash-bar-fill');
+    bar.style.animation = 'none';
+    void bar.offsetWidth;
+    bar.style.animation = '';
+    setTimeout(() => splash.classList.add('hide'), reducedMotion ? 200 : 1500);
+  });
+
+  // ---------- AMBIENT HUM (Web Audio, opt-in) ----------
+  let audioCtx = null, gainNode = null, ambientOn = false;
+  const ambientBtn = document.getElementById('ambient-btn');
+
+  function startAmbient(){
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    gainNode = audioCtx.createGain();
+    gainNode.gain.value = 0.0001;
+    gainNode.connect(audioCtx.destination);
+
+    const oscA = audioCtx.createOscillator();
+    oscA.type = 'sine';
+    oscA.frequency.value = 82;
+    oscA.connect(gainNode);
+
+    const oscB = audioCtx.createOscillator();
+    oscB.type = 'sine';
+    oscB.frequency.value = 123.5;
+    const gainB = audioCtx.createGain();
+    gainB.gain.value = 0.5;
+    oscB.connect(gainB);
+    gainB.connect(gainNode);
+
+    oscA.start();
+    oscB.start();
+    gainNode.gain.linearRampToValueAtTime(0.035, audioCtx.currentTime + 1.2);
+  }
+  function stopAmbient(){
+    if (!audioCtx) return;
+    gainNode.gain.linearRampToValueAtTime(0.0001, audioCtx.currentTime + 0.6);
+    setTimeout(() => { audioCtx.close(); audioCtx = null; }, 700);
+  }
+  ambientBtn.addEventListener('click', () => {
+    ambientOn = !ambientOn;
+    ambientBtn.textContent = ambientOn ? 'Ambient: on' : 'Ambient: off';
+    if (ambientOn) startAmbient(); else stopAmbient();
+  });
+
+  // ---------- FINALE ACHIEVEMENT ----------
+  const footerObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting){
+        unlockAchievement('finale', 'Reached The Finale');
+      }
+    });
+  }, { threshold: 0.3 });
+  footerObserver.observe(document.getElementById('footer'));
+
+  // ---------- QUICK-JUMP NAV + SCROLLSPY ----------
+  const navPills = Array.from(document.querySelectorAll('.nav-pill[data-target]'));
+  navPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const target = document.querySelector(pill.getAttribute('data-target'));
+      if (target) target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+
+  const sectionEls = navPills.map(p => document.querySelector(p.getAttribute('data-target'))).filter(Boolean);
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const idx = sectionEls.indexOf(entry.target);
+      if (idx === -1) return;
+      if (entry.isIntersecting){
+        navPills.forEach(p => p.classList.remove('active'));
+        navPills[idx].classList.add('active');
+      }
+    });
+  }, { threshold: 0.4, rootMargin: '-10% 0px -60% 0px' });
+  sectionEls.forEach(el => spyObserver.observe(el));
+</script>
+
+</body>
+</html>
