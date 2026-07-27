@@ -1,0 +1,195 @@
+/**
+ * globals.css
+ * ---------------------------------------------------------
+ * Base layer for the whole site. Two things live here that
+ * nothing else should redefine:
+ *
+ *  1. @theme — maps our design tokens into Tailwind v4, so
+ *     `bg-void`, `text-bone`, `font-display` etc. become real
+ *     utility classes. Keep these hex values in sync with
+ *     src/config/colors.js by hand — CSS can't import JS.
+ *
+ *  2. The canvas/scroll layout contract: a single fixed R3F
+ *     <canvas> sits behind everything (.canvas-layer), and the
+ *     actual page height comes from normal-flow scene spacers
+ *     in the DOM (.scroll-layer). Scenes never scroll the
+ *     canvas directly — they read scroll progress and move the
+ *     camera instead. Don't add `overflow` rules that would
+ *     break this.
+ * ---------------------------------------------------------
+ */
+
+@import "tailwindcss";
+
+@theme {
+  /* ---- color ---- */
+  --color-void: #050505;
+  --color-night: #10131a;
+  --color-stranger-blue: #1f3b73;
+  --color-crimson: #c1121f;
+  --color-ember: #ff7a3d;
+  --color-gold: #f4b942;
+  --color-blossom: #f3b6c4;
+  --color-moss: #2e4b3c;
+  --color-lantern: #e8a857;
+  --color-bone: #f5f5f0;
+  --color-mist: #8a94a6;
+
+  /* ---- type ---- */
+  --font-display: "Fraunces Variable", "Fraunces", Georgia, serif;
+  --font-body: "Instrument Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "Space Mono", "IBM Plex Mono", monospace;
+
+  /* ---- motion ---- */
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------------------------------------------------------
+   Fonts — self-hosted via @fontsource, imported here so any
+   page load gets them without a runtime Google Fonts request.
+   --------------------------------------------------------- */
+@import "@fontsource-variable/fraunces";
+@import "@fontsource/instrument-sans";
+@import "@fontsource/instrument-sans/500.css";
+@import "@fontsource/instrument-sans/600.css";
+@import "@fontsource/space-mono";
+@import "@fontsource/space-mono/700.css";
+
+/* ---------------------------------------------------------
+   Reset
+   --------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+html {
+  /* Scrollbar hidden by design — this is a "no chrome" cinematic
+     experience navigated by the Journey Map, not a browser scrollbar.
+     Native scroll behavior (and keyboard/wheel/touch input) is untouched. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  background: var(--color-void);
+  color: var(--color-bone);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------
+   Accessibility floor — never skip these two.
+   --------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--color-bone);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  /* Scene components should also check window.matchMedia in JS
+     (see hooks/usePerformance.js) to skip GSAP/R3F motion entirely —
+     this block only guards plain CSS transitions/animations. */
+}
+
+/* ---------------------------------------------------------
+   Layout contract
+   --------------------------------------------------------- */
+.canvas-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+.scroll-layer {
+  position: relative;
+  z-index: 1;
+  pointer-events: none; /* individual scene text/UI opts back in per element */
+}
+
+.scroll-layer a,
+.scroll-layer button,
+.scroll-layer [data-interactive] {
+  pointer-events: auto;
+}
+
+/* ---------------------------------------------------------
+   Typography roles
+   --------------------------------------------------------- */
+.text-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-optical-sizing: auto;
+  letter-spacing: -0.01em;
+  font-size: clamp(2.5rem, 6vw, 6rem);
+  line-height: 1.05;
+}
+
+.text-eyebrow {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.28em;
+  font-size: clamp(0.7rem, 1vw, 0.85rem);
+  color: var(--color-mist);
+}
+
+.text-quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.25rem, 2.4vw, 2rem);
+  line-height: 1.4;
+  max-width: 32ch;
+}
+
+::selection {
+  background: var(--color-crimson);
+  color: var(--color-bone);
+}
