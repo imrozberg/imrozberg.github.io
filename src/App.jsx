@@ -6,6 +6,7 @@ import { performanceTiers, DEFAULT_TIER } from './config/settings.js'
 import { cameraDefaults, cameraPaths } from './config/camera.js'
 import LoadingScreen from './components/LoadingScreen'
 import { ScrollManager, useScrollContext } from './components/ScrollManager'
+import IntroScene from './scenes/Intro'
 
 /**
  * Stand-in 3D content. Each real scene (Storm, Flora, Volleyball...)
@@ -20,6 +21,22 @@ function ScenePlaceholder({ palette, progress }) {
       <icosahedronGeometry args={[1.2, 0]} />
       <meshStandardMaterial color={palette.accent} wireframe />
     </mesh>
+  )
+}
+
+/**
+ * The only scene-specific HTML overlay so far. Deliberately doesn't
+ * repeat "VEDANT" in text — the particles themselves spell it out in
+ * 3D, and doubling it up in HTML would compete with that instead of
+ * supporting it. Just the tagline, fading in once the letters have
+ * mostly assembled.
+ */
+function IntroOverlay({ progress }) {
+  const visible = progress > 0.75
+  return (
+    <p className="text-eyebrow transition-opacity duration-700" style={{ opacity: visible ? 1 : 0 }}>
+      29 July
+    </p>
   )
 }
 
@@ -90,7 +107,11 @@ function Experience() {
           )}
 
           <Suspense fallback={null}>
-            <ScenePlaceholder palette={activeSection.palette} progress={sceneProgress[activeId] ?? 0} />
+            {activeId === 'intro' ? (
+              <IntroScene progress={sceneProgress.intro ?? 0} />
+            ) : (
+              <ScenePlaceholder palette={activeSection.palette} progress={sceneProgress[activeId] ?? 0} />
+            )}
           </Suspense>
         </Canvas>
       </div>
@@ -107,9 +128,13 @@ function Experience() {
             style={{ minHeight: `${section.lengthVh}vh` }}
             className="flex items-center justify-center"
           >
-            <p className="text-eyebrow">
-              {section.label} — {Math.round((sceneProgress[section.id] ?? 0) * 100)}%
-            </p>
+            {section.id === 'intro' ? (
+              <IntroOverlay progress={sceneProgress.intro ?? 0} />
+            ) : (
+              <p className="text-eyebrow">
+                {section.label} — {Math.round((sceneProgress[section.id] ?? 0) * 100)}%
+              </p>
+            )}
           </section>
         ))}
       </div>

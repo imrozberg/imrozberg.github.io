@@ -20,8 +20,8 @@ No step gets marked done unless it actually built/ran, not just "looks right."
 | 4 | `main.jsx` + `App.jsx` skeleton | ✅ Done |
 | 5 | `LoadingScreen` | ✅ Done |
 | 6 | `ScrollManager` (GSAP ScrollTrigger spine) | ✅ Done |
-| 7 | Particle intro → "VEDANT" wow moment | ⬜ Next up |
-| 8 | Individual scenes (Childhood → Ending, 10 scenes) | ⬜ Not started |
+| 7 | Particle intro → "VEDANT" wow moment | ✅ Done |
+| 8 | Individual scenes (Childhood → Ending, 10 scenes) | ⬜ Next up |
 | 9 | Postprocessing (Bloom, GodRays, etc.) | ⬜ Not started |
 | 10 | Cursor effects, Journey Map, audio, weather/time sync | ⬜ Not started |
 | 11 | Performance pass + deploy | ⬜ Not started |
@@ -75,19 +75,35 @@ Also fixed a fast-refresh lint warning by splitting the context/hook into their 
 just written and assumed correct. One honest gap: no headless browser in this environment,
 so WebGL rendering hasn't been visually confirmed — worth an eyeball on first `npm run dev`.
 
+**7 — Particle intro ("VEDANT")**
+`components/Particles/` — pure position-generation (`particlePoints.js`, sanity-checked
+directly in Node, not just assumed) plus GLSL shaders (`particleShaders.js`) and the R3F
+component (`ParticleField.jsx`) that ties them together. Particles scatter in a volume,
+then morph into a canvas-sampled silhouette of "VEDANT" as `progress` (the intro scene's
+own eased scroll progress from ScrollManager) goes 0→1, with a small permanent drift so
+the formed text never looks frozen. Deliberately used a plain fallback font for the
+text-sampling canvas (not our brand Fraunces) to sidestep a real font-load race — the
+Canvas mounts before `document.fonts.ready` resolves, so sampling with a
+guaranteed-available font avoids getting the wrong glyph shapes on a slow load.
+`scenes/Intro/IntroScene.jsx` wires it to the `intro` scene's accent color and particle
+count (from `performanceTiers`). HTML overlay: the "29 July" tagline fades in past 75%
+progress — deliberately not repeating "VEDANT" in HTML too, since the particles already
+say it.
+
+**Deployment**
+Pushed to `imrozberg/imrozberg.github.io` on `main`. GitHub Actions workflow
+(`.github/workflows/deploy.yml`) builds with `npm ci && npm run build` and deploys `dist/`
+via `actions/deploy-pages` on every push to `main`.
+⚠️ **Open item**: the repo's Pages source is still set to "Deploy from a branch" (legacy),
+not "GitHub Actions" — switching that requires a permission my token doesn't have
+(Pages/Administration), so it needs one manual toggle in Settings → Pages → Source →
+"GitHub Actions". Until that's flipped, GitHub's own legacy auto-builder is *also* firing
+on every push to `main` alongside our workflow, which is redundant and could race.
+
 ---
 
-## Next up — Step 7: Particle intro → "VEDANT"
+## Next up — Step 8: scenes, one at a time
 
-The signature "wow moment": darkness → drifting particles → they assemble into VEDANT →
-scatter into the first scene. This is the one moment in the whole site that has to be
-perfect. Plan once we start:
-1. Particle system component (`components/Particles/`) using instanced points + GLSL
-2. Text-to-points sampling (canvas-text → particle target positions) to form the letters
-3. GSAP timeline tied into ScrollManager's `intro` scene progress
-4. Scatter transition into whatever scene 1 (Childhood) becomes
-
-## Then — Step 8: scenes one at a time
 Order matters less than getting Flora + the particle-reform Ending right, since those
 are the emotional anchors per the original brief. Suggest: Storm → Flora → Ending first,
 then backfill Childhood/StrangerThings/Romance/Volleyball/Family/Friends/Birthday as
@@ -97,5 +113,6 @@ atmosphere-level scenes if time is short.
 
 ## Open questions / risks
 - No headless browser here → first real visual check has to happen on your machine (`npm run dev`)
+- GitHub Pages source setting still needs the manual "GitHub Actions" toggle (see above)
 - 3-day deadline — Step 8 (10 scenes) is the actual time sink, not the tech setup
-- Bundle size already ~1.1MB gzipped before any real 3D assets — worth a code-splitting pass in Step 11, not urgent yet
+- Bundle size already ~1.2MB gzipped before any real 3D assets — worth a code-splitting pass in Step 11, not urgent yet
