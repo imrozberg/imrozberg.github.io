@@ -1,15 +1,1476 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#050505" />
-    <meta name="description" content="Some storms become the people who survive them. A birthday tribute for Vedant." />
-    <title>Still Here. — Vedant</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Still Here. — For Vedant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@200;300;400;500&family=Caveat:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --void: #000000;
+      --ash: #08080a;
+      --smoke: #131316;
+      --cream: #f2ece1;
+      --muted: #7e7a72;
+      --gold: #c9a25f;
+      --dusk: #7590b6;
+      --ease: cubic-bezier(0.16, 0.84, 0.3, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html {
+      scroll-behavior: smooth;
+      background: #000;
+    }
+    body {
+      background: #000;
+      color: var(--cream);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    html.lock-scroll, html.lock-scroll body { overflow: hidden; height: 100%; }
+    ::selection { background: rgba(201,162,95,0.25); color: #fff; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #000; }
+    ::-webkit-scrollbar-thumb { background: rgba(201,162,95,0.18); border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(201,162,95,0.32); }
+
+    /* reveal primitives */
+    .reveal {
+      opacity: 0;
+      transform: translate3d(0, 30px, 0);
+      filter: blur(14px);
+      transition: opacity 1.9s var(--ease), transform 1.9s var(--ease), filter 1.9s var(--ease);
+      will-change: opacity, transform, filter;
+    }
+    .reveal.is-visible { opacity: 1; transform: translate3d(0,0,0); filter: blur(0); }
+    .reveal-slow { transition-duration: 3.2s; }
+    .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translate3d(0, 0.42em, 0);
+      filter: blur(12px);
+      transition: opacity 1.5s var(--ease), transform 1.5s var(--ease), filter 1.5s var(--ease);
+      will-change: opacity, transform, filter;
+    }
+    .word.is-visible { opacity: 1; transform: translate3d(0,0,0); filter: blur(0); }
+
+    /* atmosphere */
+    .film-grain {
+      position: fixed; inset: -150px; pointer-events: none; z-index: 60;
+      opacity: 0.045; mix-blend-mode: screen;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+      animation: grainShift 900ms steps(4) infinite;
+    }
+    @keyframes grainShift {
+      0%   { transform: translate3d(0,0,0); }
+      25%  { transform: translate3d(-14px,8px,0); }
+      50%  { transform: translate3d(9px,-12px,0); }
+      75%  { transform: translate3d(-6px,-6px,0); }
+      100% { transform: translate3d(0,0,0); }
+    }
+    .vignette {
+      position: fixed; inset: 0; pointer-events: none; z-index: 55;
+      background: radial-gradient(120% 90% at 50% 45%, rgba(0,0,0,0) 42%, rgba(0,0,0,0.55) 82%, rgba(0,0,0,0.92) 100%);
+    }
+    .scanline {
+      position: fixed; inset: 0; pointer-events: none; z-index: 54; opacity: 0.35;
+      background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px);
+    }
+    .aurora {
+      position: absolute; border-radius: 999px;
+      filter: blur(90px); will-change: transform, opacity;
+    }
+    @keyframes drift-a {
+      0%   { transform: translate3d(-6%,0,0) scale(1); opacity: 0.5; }
+      50%  { transform: translate3d(8%,-6%,0) scale(1.18); opacity: 0.85; }
+      100% { transform: translate3d(-6%,0,0) scale(1); opacity: 0.5; }
+    }
+    @keyframes drift-b {
+      0%   { transform: translate3d(4%,3%,0) scale(1.1); opacity: 0.35; }
+      50%  { transform: translate3d(-7%,-4%,0) scale(0.92); opacity: 0.7; }
+      100% { transform: translate3d(4%,3%,0) scale(1.1); opacity: 0.35; }
+    }
+    @keyframes lightray {
+      0%   { opacity: 0.05; transform: rotate(var(--rot,12deg)) translateY(-4%) scaleY(1); }
+      50%  { opacity: 0.16; transform: rotate(var(--rot,12deg)) translateY(2%) scaleY(1.06); }
+      100% { opacity: 0.05; transform: rotate(var(--rot,12deg)) translateY(-4%) scaleY(1); }
+    }
+    .light-ray {
+      position: absolute; top: -30%; height: 160%; width: 34vw;
+      background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,245,220,0.09) 45%, rgba(255,255,255,0) 100%);
+      filter: blur(28px); animation: lightray 22s ease-in-out infinite; pointer-events: none;
+    }
+
+    /* glass */
+    .glass {
+      background: linear-gradient(150deg, rgba(255,255,255,0.055), rgba(255,255,255,0.012) 45%, rgba(255,255,255,0.03));
+      border: 1px solid rgba(255,255,255,0.075);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      position: relative; overflow: hidden;
+    }
+    .glass::after {
+      content: ''; position: absolute; top: 0; left: -60%; width: 45%; height: 100%;
+      background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0) 100%);
+      transform: skewX(-14deg); transition: left 1.1s var(--ease); pointer-events: none;
+    }
+    .glass:hover::after { left: 115%; }
+    .glass { transition: border-color 900ms var(--ease), box-shadow 900ms var(--ease), transform 900ms var(--ease); }
+    .glass:hover { border-color: rgba(201,162,95,0.3); box-shadow: 0 18px 60px -30px rgba(201,162,95,0.5); }
+
+    @keyframes floaty {
+      0%   { transform: translate3d(0,0,0); }
+      50%  { transform: translate3d(0,-12px,0); }
+      100% { transform: translate3d(0,0,0); }
+    }
+    .floaty { animation: floaty var(--dur,9s) ease-in-out infinite; animation-delay: var(--delay,0s); }
+
+    @keyframes blink {
+      0%,49%  { opacity: 1; }
+      50%,100% { opacity: 0; }
+    }
+    .cursor-blink { animation: blink 1.05s steps(1) infinite; }
+
+    /* type */
+    .font-serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+    .font-sans  { font-family: 'Inter', system-ui, sans-serif; }
+    .font-hand  { font-family: 'Caveat', cursive; }
+    .title-glow { text-shadow: 0 0 42px rgba(242,236,225,0.16), 0 0 120px rgba(201,162,95,0.09); }
+    .gold-glow  { text-shadow: 0 0 26px rgba(201,162,95,0.35); }
+    .chapter-label { font-family: 'Inter', sans-serif; font-weight: 300; letter-spacing: 0.42em; text-transform: uppercase; }
+    .prose-cine p { margin-bottom: 1.85em; }
+    .hairline { height: 1px; background: linear-gradient(to right, transparent, rgba(201,162,95,0.5), transparent); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .film-grain, .floaty, .aurora, .light-ray { animation: none !important; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* layout helpers */
+    .relative   { position: relative; }
+    .absolute   { position: absolute; }
+    .fixed      { position: fixed; }
+    .inset-0    { inset: 0; }
+    .w-full     { width: 100%; }
+    .h-full     { height: 100%; }
+    .min-h-screen { min-height: 100vh; }
+    .flex       { display: flex; }
+    .flex-col   { flex-direction: column; }
+    .items-center  { align-items: center; }
+    .justify-center { justify-content: center; }
+    .text-center   { text-align: center; }
+    .overflow-hidden { overflow: hidden; }
+    .pointer-events-none { pointer-events: none; }
+    .z-0  { z-index: 0; }
+    .z-10 { z-index: 10; }
+    .z-50 { z-index: 50; }
+    .z-60 { z-index: 60; }
+    .z-80 { z-index: 80; }
+    .mx-auto    { margin-left: auto; margin-right: auto; }
+    .block      { display: block; }
+    .hidden     { display: none; }
+
+    /* chapter sections */
+    .chapter-section {
+      position: relative; width: 100%;
+      padding: 18vh 1.5rem; 
+    }
+    @media(min-width:640px) { .chapter-section { padding: 22vh 2.5rem; } }
+    .chapter-inner { position: relative; margin: 0 auto; max-width: 48rem; }
+    .chapter-inner.centered { text-align: center; }
+
+    .chapter-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 300; color: var(--cream);
+      line-height: 1.02;
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+    }
+    .chapter-epigraph {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic; font-weight: 300;
+      color: rgba(242,236,225,0.55);
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      line-height: 1.6;
+      margin-top: 2.5rem;
+    }
+    .prose-body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      font-size: clamp(0.98rem, 1.5vw, 1.14rem);
+      line-height: 2.05;
+      color: rgba(242,236,225,0.7);
+      margin-bottom: 1.85em;
+    }
+    .pull-quote {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 300;
+      color: rgba(242,236,225,0.9);
+      font-size: clamp(1.4rem, 3vw, 2.5rem);
+      line-height: 1.55;
+      margin: 4rem 0 6rem;
+    }
+    .mt-label   { margin-bottom: 1.75rem; }
+    .mt-hairline { margin-top: 2.5rem; width: 8rem; }
+    .mt-prose   { margin-top: 3.5rem; }
+    .mt-children { margin-top: 3.5rem; }
+
+    /* nav */
+    #nav-progress {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      height: 1px; background: rgba(255,255,255,0.05);
+      opacity: 0; transition: opacity 1s;
+    }
+    #nav-progress.visible { opacity: 1; }
+    #nav-bar {
+      height: 100%;
+      background: linear-gradient(to right, rgba(201,162,95,0.3), var(--gold), rgba(201,162,95,0.3));
+      transform-origin: left;
+      box-shadow: 0 0 14px rgba(201,162,95,0.55);
+      transition: transform 240ms linear;
+    }
+    #chapter-dots {
+      position: fixed; right: 1.75rem; top: 50%; transform: translateY(-50%);
+      z-index: 50; display: none; flex-direction: column; align-items: flex-end; gap: 1rem;
+      opacity: 0; transition: opacity 1.6s; pointer-events: none;
+    }
+    #chapter-dots.visible { opacity: 1; pointer-events: auto; }
+    @media(min-width:640px) { #chapter-dots { display: flex; } }
+    .dot-link { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+    .dot-label {
+      font-family: 'Inter', sans-serif; font-weight: 300;
+      font-size: 0.5rem; letter-spacing: 0.42em; text-transform: uppercase;
+      white-space: nowrap; transition: all 0.7s; color: rgba(126,122,114,0.7); opacity: 0;
+    }
+    .dot-link:hover .dot-label, .dot-link.active .dot-label { opacity: 1; color: rgba(242,236,225,0.7); }
+    .dot-pip {
+      border-radius: 999px; background: rgba(242,236,225,0.25); transition: all 0.7s;
+      width: 5px; height: 5px; display: block; flex-shrink: 0;
+    }
+    .dot-link:hover .dot-pip { background: rgba(242,236,225,0.6); }
+    .dot-link.active .dot-pip { width: 7px; height: 7px; background: var(--gold); box-shadow: 0 0 12px rgba(201,162,95,0.9); }
+    #section-counter {
+      position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 50;
+      font-size: 0.5rem; color: rgba(126,122,114,0.6); opacity: 0; transition: opacity 1.6s;
+      font-family: 'Inter', sans-serif; font-weight: 300;
+      letter-spacing: 0.42em; text-transform: uppercase;
+    }
+    #section-counter.visible { opacity: 1; }
+    @media(min-width:768px) { #section-counter { display: block; } }
+
+    /* hero */
+    #hero {
+      position: relative; min-height: 100svh; width: 100%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 1.5rem; text-align: center;
+    }
+    #hero-inner { transition: opacity 2.6s var(--ease), filter 2.6s var(--ease); opacity: 0; filter: blur(20px); }
+    #hero-inner.entered { opacity: 1; filter: blur(0); }
+    .hero-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 300; color: var(--cream);
+      text-shadow: 0 0 42px rgba(242,236,225,0.16), 0 0 120px rgba(201,162,95,0.09);
+      line-height: 0.95;
+      font-size: clamp(14vw, 14vw, 8.5rem);
+      letter-spacing: 0.02em;
+    }
+    @media(min-width:640px) { .hero-title { font-size: clamp(12vw,12vw,8.5rem); } }
+    @media(min-width:768px) { .hero-title { font-size: min(9.5vw, 8.5rem); } }
+    .hero-scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+      opacity: 0; transition: opacity 3s 1.2s;
+    }
+    .hero-scroll-hint.entered { opacity: 1; }
+    .hero-line { display: block; width: 1px; height: 4rem; background: linear-gradient(to bottom, rgba(242,236,225,0.4), transparent); }
+
+    /* loader */
+    #loader {
+      position: fixed; inset: 0; z-index: 80; background: #000;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 1.5rem; transition: opacity 1.4s;
+    }
+    #loader.leaving { opacity: 0; pointer-events: none; }
+    #loader-canvas-wrap { position: absolute; inset: 0; }
+    #loader-vignette {
+      position: absolute; inset: 0;
+      background: radial-gradient(70% 60% at 50% 50%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.85) 100%);
+    }
+    #loader-text { position: relative; z-index: 10; max-width: 48rem; text-align: center; }
+    .loader-line {
+      font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 300;
+      color: rgba(242,236,225,0.85);
+      font-size: clamp(1.5rem, 4vw, 2.5rem); line-height: 1.6;
+      transition: opacity 2.2s var(--ease), filter 2.2s var(--ease), transform 2.2s var(--ease);
+      opacity: 0; filter: blur(12px); transform: translateY(12px);
+      position: absolute; inset-x: 0; top: 0;
+    }
+    .loader-line.active { opacity: 1; filter: blur(0); transform: translateY(0); position: relative; }
+    #loader-dedication {
+      font-family: 'Inter', sans-serif; font-weight: 300;
+      font-size: clamp(0.6rem, 1.2vw, 0.75rem); letter-spacing: 0.42em; text-transform: uppercase;
+      color: rgba(201,162,95,0.8);
+      transition: opacity 2.2s var(--ease), filter 2.2s var(--ease);
+      opacity: 0; filter: blur(12px); position: absolute; inset-x: 0; top: 0;
+    }
+    #loader-dedication.active { opacity: 1; filter: blur(0); position: relative; }
+    #skip-btn {
+      position: absolute; bottom: 2.5rem; right: 2rem;
+      font-family: 'Inter', sans-serif; font-weight: 300;
+      font-size: 0.55rem; letter-spacing: 0.42em; text-transform: uppercase;
+      color: rgba(126,122,114,0.6); background: none; border: none; cursor: pointer;
+      transition: color 0.7s, opacity 0.7s;
+    }
+    #skip-btn:hover { color: rgba(242,236,225,0.8); }
+    #skip-btn.leaving { opacity: 0; }
+
+    /* easter egg */
+    #easter-egg {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      z-index: 70; padding: 0 1.5rem; width: 100%; max-width: 36rem;
+      pointer-events: none;
+      transition: opacity 1.4s, transform 1.4s;
+      opacity: 0; transform: translateX(-50%) translateY(1rem);
+    }
+    #easter-egg.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #easter-egg-box { border-radius: 999px; padding: 1rem 1.5rem; text-align: center; }
+    #easter-egg-text {
+      font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 300;
+      color: rgba(242,236,225,0.8); font-size: clamp(0.85rem, 1.8vw, 1rem); line-height: 1.6;
+    }
+
+    /* ending */
+    #ending { position: relative; width: 100%; padding: 16vh 1.5rem 0; }
+    @media(min-width:640px) { #ending { padding: 16vh 2.5rem 0; } }
+    .ending-line-wrap-long  { padding: 16vh 0; }
+    .ending-line-wrap-short { padding: 9vh 0; }
+    .ending-line {
+      font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 300; line-height: 1.45;
+      font-size: clamp(1.5rem, 4vw, 3rem);
+      color: rgba(242,236,225,0.8);
+    }
+    .ending-line.accent { color: rgba(201,162,95,0.9); text-shadow: 0 0 26px rgba(201,162,95,0.35); font-size: clamp(1.8rem, 5vw, 3.75rem); }
+    #title-reformation { position: relative; height: 100svh; width: 100%; display: flex; align-items: center; justify-content: center; }
+    #blackout {
+      position: relative; height: 100svh; width: 100%;
+      display: flex; align-items: center; justify-content: center; background: #000;
+    }
+    #blackout-bg { position: absolute; inset: 0; background: #000; }
+    #blackout-content {
+      position: relative; z-index: 10; display: flex; align-items: center; gap: 0.75rem; padding: 1.5rem;
+    }
+    #blackout-line {
+      font-family: 'Inter', sans-serif; font-weight: 300;
+      font-size: clamp(0.75rem, 1.5vw, 1rem); letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(242,236,225,0.55);
+      transition: opacity 2.6s, filter 2.6s; opacity: 0; filter: blur(12px);
+    }
+    #blackout-line.show { opacity: 1; filter: blur(0); }
+
+    /* letter */
+    #letter { position: relative; width: 100%; padding: 18vh 1.5rem; }
+    @media(min-width:640px) { #letter { padding: 22vh 2.5rem; } }
+    .letter-inner { position: relative; margin: 0 auto; max-width: 40rem; }
+    .letter-gold-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(60% 45% at 50% 30%, rgba(201,162,95,0.07), rgba(0,0,0,0) 70%);
+    }
+    .letter-salutation {
+      font-family: 'Caveat', cursive; font-size: clamp(2.5rem, 5vw, 3rem);
+      color: rgba(242,236,225,0.9); text-shadow: 0 0 26px rgba(201,162,95,0.35);
+      margin-top: 4rem;
+    }
+    .letter-beat {
+      font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-weight: 300;
+      color: rgba(242,236,225,0.85); font-size: clamp(1.3rem, 2.5vw, 1.875rem);
+      line-height: 1.6; padding: 1rem 0;
+    }
+    .letter-body {
+      font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 300;
+      color: rgba(242,236,225,0.7); font-size: clamp(1.1rem, 2vw, 1.35rem); line-height: 1.95;
+    }
+    .letter-sign {
+      font-family: 'Caveat', cursive; font-size: clamp(2.5rem, 5vw, 3.75rem);
+      color: rgba(201,162,95,0.9); text-shadow: 0 0 26px rgba(201,162,95,0.35);
+      margin-top: 5rem; line-height: 1.35;
+    }
+
+    /* final scene */
+    #final {
+      position: relative; width: 100%; min-height: 130vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 1.5rem; text-align: center; overflow: hidden;
+    }
+    .final-gradient {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(65% 50% at 50% 50%, rgba(0,0,0,0) 20%, rgba(0,0,0,0.7) 100%);
+    }
+    .final-inner { position: relative; z-index: 10; max-width: 48rem; width: 100%; }
+    .final-line {
+      font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 300;
+      color: rgba(242,236,225,0.85); font-size: clamp(1.5rem, 4vw, 3rem); line-height: 1.5;
+    }
+    .final-title {
+      font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 300;
+      color: rgba(201,162,95,0.9); text-shadow: 0 0 26px rgba(201,162,95,0.35);
+      font-size: clamp(1.8rem, 5vw, 3.75rem); line-height: 1.3;
+      margin-top: 6rem;
+    }
+
+    /* timeline */
+    #timeline { position: relative; width: 100%; padding: 18vh 1.5rem; }
+    @media(min-width:640px) { #timeline { padding: 22vh 2.5rem; } }
+    .timeline-inner { margin: 0 auto; max-width: 48rem; }
+    .timeline-track-wrap { position: relative; margin-top: 5rem; padding-left: 2.5rem; }
+    @media(min-width:640px) { .timeline-track-wrap { padding-left: 4rem; } }
+    .timeline-rail { position: absolute; left: 7px; top: 0.5rem; bottom: 0.5rem; width: 1px; background: rgba(255,255,255,0.08); }
+    @media(min-width:640px) { .timeline-rail { left: 11px; } }
+    .timeline-fill { position: absolute; left: 7px; top: 0.5rem; width: 1px; transform-origin: top; background: linear-gradient(to bottom, rgba(201,162,95,0.8), rgba(201,162,95,0.5), rgba(201,162,95,0.1)); box-shadow: 0 0 16px rgba(201,162,95,0.55); transition: transform 180ms linear; }
+    @media(min-width:640px) { .timeline-fill { left: 11px; } }
+    .timeline-list { list-style: none; }
+    .timeline-item { position: relative; padding-bottom: 6rem; }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-dot {
+      position: absolute; left: -2.5rem; top: 0.5rem; border-radius: 999px;
+      transition: all 0.9s; background: rgba(242,236,225,0.2); width: 9px; height: 9px; margin-left: 3px;
+    }
+    @media(min-width:640px) { .timeline-dot { left: -4rem; } }
+    .timeline-dot.lit { background: rgba(201,162,95,1); box-shadow: 0 0 20px rgba(201,162,95,0.85); width: 13px; height: 13px; margin-left: 1px; }
+    .timeline-node-inner { transition: opacity 1.4s; opacity: 0.45; }
+    .timeline-node-inner.lit { opacity: 1; }
+    .timeline-node-label { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 0.5rem; letter-spacing: 0.42em; text-transform: uppercase; color: rgba(201,162,95,0.7); }
+    .timeline-node-title { margin-top: 1rem; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 300; font-size: clamp(1.5rem, 3vw, 2.25rem); color: rgba(242,236,225,0.9); }
+    .timeline-node-body { margin-top: 1rem; font-family: 'Inter', sans-serif; font-weight: 300; font-size: 0.95rem; line-height: 1.95; color: rgba(242,236,225,0.5); max-width: 36rem; }
+
+    /* small worlds cards */
+    .cards-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin-top: 4rem; }
+    @media(min-width:640px) { .cards-grid { grid-template-columns: 1fr 1fr; } }
+    @media(min-width:1024px) { .cards-grid { grid-template-columns: 1fr 1fr 1fr; } }
+    .card {
+      border-radius: 1rem; padding: 1.75rem; min-height: 13rem;
+      display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;
+    }
+    .card-glyph { font-size: 1.875rem; display: block; transition: transform 0.7s; }
+    .card:hover .card-glyph { transform: scale(1.1); }
+    .card-title { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 300; font-size: 1.5rem; color: rgba(242,236,225,0.9); transition: color 0.7s; margin-bottom: 0.75rem; }
+    .card:hover .card-title { color: rgba(201,162,95,0.9); }
+    .card-line { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 0.9rem; line-height: 1.85; color: rgba(242,236,225,0.5); }
+    .card-shimmer { position: absolute; inset: -1px; border-radius: 1rem; opacity: 0; pointer-events: none; transition: opacity 1.2s; background: radial-gradient(60% 60% at 50% 0%, rgba(201,162,95,0.10), rgba(0,0,0,0) 70%); }
+    .card:hover .card-shimmer { opacity: 1; }
+
+    /* people grid */
+    .people-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 4rem 0 5rem; }
+    @media(min-width:768px) { .people-grid { grid-template-columns: 1fr 1fr 1fr; } }
+    .people-card { padding-left: 1.5rem; border-left: 1px solid rgba(255,255,255,0.1); transition: border-color 0.7s; position: relative; }
+    .people-card:hover { border-left-color: rgba(201,162,95,0.4); }
+    .people-card-dot { position: absolute; left: -3px; top: 4px; width: 5px; height: 5px; border-radius: 999px; background: rgba(201,162,95,0.7); box-shadow: 0 0 10px rgba(201,162,95,0.6); transition: all 0.7s; }
+    .people-card:hover .people-card-dot { background: var(--gold); }
+    .people-card-title { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 300; font-size: 1.5rem; color: rgba(242,236,225,0.9); }
+    .people-card-line { margin-top: 1rem; font-family: 'Inter', sans-serif; font-weight: 300; font-size: 0.92rem; line-height: 1.95; color: rgba(242,236,225,0.5); }
+
+    /* tomorrow open lines */
+    .open-line {
+      font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 300;
+      color: rgba(242,236,225,0.85); font-size: clamp(1.5rem, 4vw, 3rem); line-height: 1.35;
+    }
+    .tomorrow-wrap { position: relative; }
+
+    /* visualizer */
+    #visualizer-canvas { width: 100%; height: 6rem; position: relative; }
+    .visualizer-wrap { position: relative; width: 100%; height: 6rem; margin-top: 6rem; opacity: 0.7; }
+
+    /* generic spacing */
+    .mt-4  { margin-top: 1rem; }
+    .mt-6  { margin-top: 1.5rem; }
+    .mt-8  { margin-top: 2rem; }
+    .mt-10 { margin-top: 2.5rem; }
+    .mt-12 { margin-top: 3rem; }
+    .mt-14 { margin-top: 3.5rem; }
+    .mt-16 { margin-top: 4rem; }
+    .mt-20 { margin-top: 5rem; }
+    .mt-24 { margin-top: 6rem; }
+    .mb-7  { margin-bottom: 1.75rem; }
+    .my-16 { margin-top: 4rem; margin-bottom: 4rem; }
+    .py-4  { padding-top: 1rem; padding-bottom: 1rem; }
+    .gap-5 { gap: 1.25rem; }
+    .space-y-9 > * + * { margin-top: 2.25rem; }
+    @media(min-width:640px) { .sm-space-y-11 > * + * { margin-top: 2.75rem; } }
+    .space-y-10 > * + * { margin-top: 2.5rem; }
+    @media(min-width:640px) { .sm-space-y-14 > * + * { margin-top: 3.5rem; } }
+    .max-w-2xl { max-width: 40rem; }
+    .max-w-3xl { max-width: 48rem; }
+    .text-gold { color: var(--gold); }
+    .text-sm   { font-size: 0.875rem; }
+
+    /* cinematic background canvas */
+    #bg-canvas { position: absolute; inset: 0; }
+  </style>
+</head>
+<body>
+
+<!-- ===================== ATMOSPHERE OVERLAYS ===================== -->
+<div class="vignette" aria-hidden="true"></div>
+<div class="scanline" aria-hidden="true"></div>
+<div class="film-grain" aria-hidden="true"></div>
+
+<!-- ===================== CINEMATIC BACKGROUND ===================== -->
+<div style="position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;" aria-hidden="true">
+  <div style="position:absolute;inset:0;background:#000;"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 0%, rgba(24,26,33,0.9), rgba(0,0,0,1) 70%);"></div>
+  <div class="aurora" style="width:58vw;height:58vw;left:-14vw;top:6vh;background:radial-gradient(circle,rgba(117,144,182,0.14),rgba(0,0,0,0) 68%);animation:drift-a 46s ease-in-out infinite;"></div>
+  <div class="aurora" style="width:52vw;height:52vw;right:-12vw;top:38vh;background:radial-gradient(circle,rgba(201,162,95,0.12),rgba(0,0,0,0) 68%);animation:drift-b 62s ease-in-out infinite;"></div>
+  <div class="aurora" style="width:44vw;height:44vw;left:28vw;bottom:-14vh;background:radial-gradient(circle,rgba(242,236,225,0.055),rgba(0,0,0,0) 70%);animation:drift-a 74s ease-in-out infinite reverse;"></div>
+  <div class="light-ray" style="left:8%;--rot:14deg;animation-delay:0s;"></div>
+  <div class="light-ray" style="right:12%;--rot:-11deg;animation-delay:8s;"></div>
+  <canvas id="bg-canvas"></canvas>
+</div>
+
+<!-- ===================== NAVIGATION ===================== -->
+<div id="nav-progress" aria-hidden="true"><div id="nav-bar"></div></div>
+<nav id="chapter-dots" aria-label="Chapters"></nav>
+<div id="section-counter" aria-hidden="true"></div>
+
+<!-- ===================== MAIN CONTENT ===================== -->
+<main id="main-content" style="position:relative;z-index:10;width:100%;opacity:0;transition:opacity 2.4s;">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div id="hero-inner">
+      <p class="chapter-label" style="font-size:0.55rem;color:rgba(126,122,114,0.7);margin-bottom:2.5rem;">An interactive memory</p>
+      <h1 id="hero-title" class="hero-title">STILL HERE<span class="text-gold">.</span></h1>
+      <div id="hero-sub" style="margin-top:2.5rem;">
+        <div class="hairline" style="width:10rem;margin:0 auto;opacity:0.7;"></div>
+        <p class="font-serif" style="font-style:italic;font-weight:300;color:rgba(242,236,225,0.7);font-size:1.35rem;margin-top:1.25rem;">For Vedant.</p>
+        <p class="chapter-label" style="font-size:0.55rem;color:rgba(201,162,95,0.75);margin-top:0.75rem;">Happy Birthday</p>
+      </div>
+    </div>
+    <div class="hero-scroll-hint" id="hero-scroll">
+      <span class="chapter-label" style="font-size:0.5rem;color:rgba(126,122,114,0.6);">Scroll slowly</span>
+      <span class="hero-line"></span>
+    </div>
+  </section>
+
+  <!-- CHAPTER 1: THE BEGINNING -->
+  <section id="beginning" class="chapter-section" data-chapter="The Beginning">
+    <div class="chapter-inner">
+      <p class="reveal chapter-label mt-label" style="font-size:0.55rem;color:rgba(201,162,95,0.7);">Chapter One</p>
+      <h2 class="chapter-title title-glow word-reveal" data-text="The Beginning"></h2>
+      <div class="reveal" style="transition-delay:420ms"><div class="hairline mt-hairline"></div></div>
+      <div class="reveal" style="transition-delay:560ms">
+        <p class="chapter-epigraph">Nobody tells us we're living the days we'll someday miss.</p>
+      </div>
+      <div class="mt-children">
+        <p class="reveal prose-body">They simply happen. Quietly. There is no music underneath them, no camera pulling back, nobody standing at the edge of the afternoon telling us to pay attention. A door opens. Someone says something completely ordinary. And years later, that ordinary thing is the part we can still hear perfectly.</p>
+        <p class="reveal prose-body">Childhood is strange that way. It is the only chapter of our lives we experience without knowing it is a chapter. We are not building anything. We are not becoming anyone. We are just alive, in the loudest and simplest way a person can be, and we assume it will stay that way because we have never known it to end.</p>
+        <p class="reveal prose-body">Back then, time was not measured in deadlines. It was measured in seasons, in the length of a shadow on a wall, in how long you could stay outside before someone called you home. A single day could hold an entire lifetime. You could be bored at noon and unstoppable by evening. Nothing had consequences yet, so everything felt possible.</p>
+        <p class="reveal prose-body">Our worlds were small. A street. A staircase. A few rooms. A handful of people whose names we did not have to remember because they were simply always there. And somehow, that small world felt complete. We were not waiting for a bigger one. We had not yet learned that there was a bigger one.</p>
+        <div class="reveal reveal-slow pull-quote">
+          One afternoon becomes a memory.<br>
+          One laugh becomes impossible to recreate.<br>
+          <span style="color:rgba(201,162,95,0.9);">One ordinary day slowly becomes priceless.</span>
+        </div>
+        <p class="reveal prose-body">What no one warns you about is the quietness of the change. There is no last day of childhood. Nobody hands you a note. There is only a slow, generous fade, where the games stop being interesting and the questions start getting heavier and one morning you notice you have been carrying something for a while without remembering when you picked it up.</p>
+        <p class="reveal prose-body">And still, the beginning never really disappears. It stays underneath everything. It is in the way a person laughs when they finally stop performing. It is in the way someone still gets excited about a small thing, even now, even after everything. Those are the parts of us that were built early, and they are the parts that last the longest.</p>
+        <p class="reveal prose-body">This chapter is not about a specific memory. It is about the fact that they existed at all. That there were years where you did not have to be impressive. Where being yourself was not a strategy. Where the future was a rumour and the present was the entire world.</p>
+        <p class="reveal prose-body">We were living inside something beautiful and we did not know it. Maybe that is the whole point. Maybe that is why it was beautiful.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 2: GROWING QUIETLY -->
+  <section id="growing" class="chapter-section" data-chapter="Growing Quietly">
+    <div class="chapter-inner">
+      <p class="reveal chapter-label mt-label" style="font-size:0.55rem;color:rgba(201,162,95,0.7);">Chapter Two</p>
+      <h2 class="chapter-title title-glow word-reveal" data-text="Growing Quietly"></h2>
+      <div class="reveal" style="transition-delay:420ms"><div class="hairline mt-hairline"></div></div>
+      <div class="reveal" style="transition-delay:560ms">
+        <p class="chapter-epigraph">Nobody grows up in a single moment. It happens in small, unremarkable increments.</p>
+      </div>
+      <div class="mt-children">
+        <p class="reveal prose-body">One day you answer a question you would have avoided a year ago. One day you handle something alone that you would have handed to someone else. One day you catch yourself being patient in a situation that used to make you furious, and you do not even notice that you have changed until much later.</p>
+        <p class="reveal prose-body">Growing up is mostly this: a slow exchange. Simplicity leaves and responsibility takes its place, and the trade happens so gradually that you cannot point to the exact afternoon it started. You are just suddenly the person who remembers things, who plans things, who thinks two weeks ahead instead of two hours.</p>
+        <p class="reveal prose-body">And there is fear in it. There always is. The fear of choosing wrong. The fear of being average. The fear that everyone else received instructions you somehow missed. Nobody talks about it much, because at some point we all silently agreed to pretend we know what we are doing. But we all felt it. We all still feel it, some days.</p>
+        <div class="reveal reveal-slow pull-quote">Every mistake is just a lesson wearing an uncomfortable disguise.</div>
+        <p class="reveal prose-body">The failures come first, always. The subject that refused to make sense. The plan that fell apart three days before it mattered. The version of yourself you were absolutely certain about, right up until it stopped working. And the strange part is that none of it feels like learning while it is happening. It just feels like losing.</p>
+        <p class="reveal prose-body">But learning rarely announces itself. It shows up later, in the way you handle the next hard thing. In how much faster you recover. In how much less you need someone else to tell you it will be alright. That is what growth actually looks like: not a triumphant montage, but a slightly steadier hand the second time around.</p>
+        <p class="reveal prose-body">And then there are the small victories, the ones nobody applauds. Finishing something you wanted to quit. Being honest when a lie would have been easier. Getting up on a morning that offered no reason to. Saying sorry first. Trying again on a Tuesday with nobody watching. Those are the real ones. Those are the ones that build a person.</p>
+        <p class="reveal prose-body">You were becoming stronger the entire time. Not in the loud way people imagine strength, with victories and announcements, but in the quiet way, where you simply kept showing up and slowly stopped needing the world to confirm that you were doing alright.</p>
+        <p class="reveal prose-body">The uncertainty never fully leaves. It just gets smaller relative to you. That is the secret nobody explains. You do not outgrow the fear. You outgrow the version of yourself that was ruled by it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 3: THE PEOPLE WE BECOME -->
+  <section id="become" class="chapter-section" data-chapter="The People We Become">
+    <div class="chapter-inner">
+      <p class="reveal chapter-label mt-label" style="font-size:0.55rem;color:rgba(201,162,95,0.7);">Chapter Three</p>
+      <h2 class="chapter-title title-glow word-reveal" data-text="The People We Become"></h2>
+      <div class="reveal" style="transition-delay:420ms"><div class="hairline mt-hairline"></div></div>
+      <div class="reveal" style="transition-delay:560ms">
+        <p class="chapter-epigraph">No one is built from big moments. We are assembled out of thousands of small ones.</p>
+      </div>
+      <div class="mt-children">
+        <p class="reveal prose-body">A sentence someone said to you when you were fourteen. A song you played so many times it stopped being a song and became a season. A conversation you have completely forgotten that still, somehow, changed the way you speak to people. None of it looked important while it was happening. All of it stayed.</p>
+        <p class="reveal prose-body">We like to imagine that identity is a decision — that at some point you sit down and choose who you are going to be. It never works like that. You are the sum of the people who were kind to you and the people who were not. The rooms you sat in. The things you laughed at when you were supposed to be serious. The late nights that had no purpose and ended up mattering more than the days that did.</p>
+        <div class="reveal reveal-slow pull-quote">
+          The jokes nobody else would understand.<br>
+          The victories nobody else celebrated.<br>
+          <span style="color:rgba(242,236,225,0.5);">The losses nobody else noticed.</span>
+        </div>
+        <p class="reveal prose-body">That last one deserves a pause. Everyone has a private ledger of things that went wrong quietly — the disappointments that were never big enough to explain to anyone, the days that simply cost more than they should have. You carry them alone, not because nobody cares, but because there is no good way to bring them up. And they shape you just as much as the bright things do. Maybe more.</p>
+        <p class="reveal prose-body">And the small victories work the same way. There were mornings you chose to be decent when it would have been easier not to be. Times you stayed calm. Times you helped someone and never mentioned it. No one gave you anything for those. They still became part of you.</p>
+        <p class="reveal prose-body">This is the quiet arithmetic of a person. A little kindness here. A little stubbornness there. Some music. Some grief. Some ridiculous inside joke that has outlived its own origin. Every single one of those moments is still inside you, running underneath the surface of who you are today, invisible and load-bearing.</p>
+        <p class="reveal prose-body">Nothing is wasted. Not the boring years. Not the wrong turns. Not the friendships that faded, not the versions of yourself you are slightly embarrassed by now. They were all necessary. They were the scaffolding. You cannot remove them without changing the shape of the building.</p>
+        <p class="reveal prose-body">So when someone says they admire who you have become, understand what they are really saying. They are not talking about the result. They are talking about everything it took. Every unremarkable day that quietly voted for the person standing here now.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 4: SMALL WORLDS -->
+  <section id="worlds" class="chapter-section" data-chapter="Small Worlds">
+    <div class="chapter-inner">
+      <p class="reveal chapter-label mt-label" style="font-size:0.55rem;color:rgba(201,162,95,0.7);">Chapter Four</p>
+      <h2 class="chapter-title title-glow word-reveal" data-text="Small Worlds"></h2>
+      <div class="reveal" style="transition-delay:420ms"><div class="hairline mt-hairline"></div></div>
+      <div class="reveal" style="transition-delay:560ms">
+        <p class="chapter-epigraph">Tell me what someone loves and I can tell you almost everything about them.</p>
+      </div>
+      <div class="mt-children">
+        <p class="reveal prose-body">Not what they want. Not what they are working toward. What they love — the things they return to without being asked, the things that make an ordinary evening feel like it was worth staying awake for. Those are the honest parts of a person.</p>
+        <p class="reveal prose-body">These are yours. Not achievements, not plans, just the small worlds you disappear into and come back from slightly lighter.</p>
+        <div class="cards-grid">
+          <div class="reveal card glass floaty" style="--dur:8s;--delay:0s;">
+            <span class="card-glyph" aria-hidden="true">🏐</span>
+            <div class="mt-8">
+              <h3 class="card-title">Volleyball</h3>
+              <p class="card-line">The specific joy of a court, a whistle, and six people who trust each other for two hours.</p>
+            </div>
+            <div class="card-shimmer"></div>
+          </div>
+          <div class="reveal card glass floaty" style="--dur:9.7s;--delay:0.6s;">
+            <span class="card-glyph" aria-hidden="true">📺</span>
+            <div class="mt-8">
+              <h3 class="card-title">Stranger Things</h3>
+              <p class="card-line">Kids in a small town choosing each other over the dark. It was never really about the monster.</p>
+            </div>
+            <div class="card-shimmer"></div>
+          </div>
+          <div class="reveal card glass floaty" style="--dur:11.4s;--delay:1.2s;">
+            <span class="card-glyph" aria-hidden="true">❤️</span>
+            <div class="mt-8">
+              <h3 class="card-title">Flora</h3>
+              <p class="card-line">The person who makes the ordinary hours worth reporting back on.</p>
+            </div>
+            <div class="card-shimmer"></div>
+          </div>
+          <div class="reveal card glass floaty" style="--dur:8s;--delay:1.8s;">
+            <span class="card-glyph" aria-hidden="true">👨‍👩‍👦</span>
+            <div class="mt-8">
+              <h3 class="card-title">Family</h3>
+              <p class="card-line">The quiet architecture underneath everything. Always there, rarely thanked enough.</p>
+            </div>
+            <div class="card-shimmer"></div>
+          </div>
+          <div class="reveal card glass floaty" style="--dur:9.7s;--delay:2.4s;">
+            <span class="card-glyph" aria-hidden="true">👥</span>
+            <div class="mt-8">
+              <h3 class="card-title">Friends</h3>
+              <p class="card-line">The chosen ones. The chaos. The people who know which stories not to tell.</p>
+            </div>
+            <div class="card-shimmer"></div>
+          </div>
+          <div class="reveal card glass floaty" style="--dur:11.4s;--delay:3s;">
+            <span class="card-glyph" aria-hidden="true">🌌</span>
+            <div class="mt-8">
+              <h3 class="card-title">Quiet nights</h3>
+              <p class="card-line">When the noise finally stops and the world feels like it belongs to you again.</p>
+            </div>
+            <div class="card-shimmer"></div>
+          </div>
+        </div>
+        <div class="mt-20">
+          <p class="reveal prose-body">None of these will end up on a résumé. That is exactly why they matter. A life is not measured by the things that impress strangers; it is measured by what you would still choose on a night when nothing is required of you.</p>
+          <p class="reveal prose-body">And the strange thing about the things we love is that they love us back, in their own way. They give us somewhere to put the parts of ourselves that have nowhere else to go.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 5: THE WEIGHT WE CARRY -->
+  <div class="tomorrow-wrap">
+    <canvas class="deep-stars-canvas" style="position:absolute;inset:0;pointer-events:none;" aria-hidden="true" data-density="1" id="weight-stars-placeholder"></canvas>
+    <div style="position:absolute;inset:0;background:radial-gradient(90% 70% at 50% 50%,rgba(10,12,18,0.85),rgba(0,0,0,0.4));pointer-events:none;"></div>
+    <!-- Rain Canvas -->
+    <canvas id="rain-canvas" style="position:absolute;inset:0;pointer-events:none;" aria-hidden="true"></canvas>
+    <section id="weight" class="chapter-section" data-chapter="The Weight We Carry">
+      <div class="chapter-inner">
+        <p class="reveal chapter-label mt-label" style="font-size:0.55rem;color:rgba(201,162,95,0.7);">Chapter Five</p>
+        <h2 class="chapter-title title-glow word-reveal" data-text="The Weight We Carry"></h2>
+        <div class="reveal" style="transition-delay:420ms"><div class="hairline mt-hairline"></div></div>
+        <div class="reveal" style="transition-delay:560ms">
+          <p class="chapter-epigraph">At some point, life stops being generous with easy days.</p>
+        </div>
+        <div class="mt-children">
+          <p class="reveal prose-body">It happens to everyone, and it never announces itself politely. Dreams that felt inevitable start asking for more than you expected to give. Plans collapse for reasons that have nothing to do with you. People you assumed were permanent quietly become people you used to know. And confidence, which took years to build, can disappear in an afternoon.</p>
+          <p class="reveal prose-body">There are seasons where nothing dramatic goes wrong and everything is still hard. Where you are functioning, answering messages, showing up, doing the things — and carrying something heavy the entire time that you never quite find the words for. Those seasons are the loneliest, because they do not look like anything from the outside.</p>
+          <p class="reveal prose-body">And nobody prepares you for how ordinary it feels. There is no soundtrack for a bad year. Just mornings that take a little more effort than they should, and evenings where you are quietly relieved that the day is finally over.</p>
+          <div class="reveal reveal-slow pull-quote" style="color:rgba(242,236,225,0.8);">And yet — people keep walking.</div>
+          <p class="reveal prose-body">That is the part I find genuinely remarkable. Not the recovery, not the comeback, not the moment things finally turn. Just the walking. The unglamorous decision, made again and again without an audience, to keep going for one more day and see what it holds.</p>
+          <p class="reveal prose-body">Resilience gets described like it is dramatic. It is not. Resilience is getting up when there is no good reason to. It is doing the small, boring, necessary thing when nothing feels like it matters. It is texting someone back. It is going to practice. It is finishing the assignment badly instead of not at all. It is choosing not to become bitter, which is much harder than it sounds.</p>
+          <p class="reveal prose-body">You have done that. Maybe more than most people know, because you have never been the type to make a performance out of struggling. There is a particular kind of strength in carrying something quietly and still being warm to the people around you. It costs something. Most people never notice the cost. I have.</p>
+          <p class="reveal prose-body">The hard chapters do not make sense while you are inside them. They only make sense in retrospect, when you realise that each one taught you something you could not have learned any other way — usually about your own capacity, which is always larger than you assume.</p>
+          <div class="reveal reveal-slow pull-quote"><span style="color:rgba(201,162,95,0.9);">Every difficult chapter became another reason to keep going.</span></div>
+          <p class="reveal prose-body">Not because pain is noble. It is not. But because you survived it, and that survival is now part of your evidence. Every hard thing you have already outlasted is proof for the next one. You have a record. It is longer than you think.</p>
+          <p class="reveal prose-body">And the rain always stops. Not on schedule, not when you ask it to, but it stops. And then there is that first ordinary morning afterwards where the light is just light again, and you notice you can breathe properly, and nothing about it is dramatic. It is just quiet. It is just over.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- CHAPTER 6: PEOPLE WHO STAY -->
+  <section id="people" class="chapter-section" data-chapter="People Who Stay">
+    <div class="chapter-inner">
+      <p class="reveal chapter-label mt-label" style="font-size:0.55rem;color:rgba(201,162,95,0.7);">Chapter Six</p>
+      <h2 class="chapter-title title-glow word-reveal" data-text="People Who Stay"></h2>
+      <div class="reveal" style="transition-delay:420ms"><div class="hairline mt-hairline"></div></div>
+      <div class="reveal" style="transition-delay:560ms">
+        <p class="chapter-epigraph">Friendship is not measured in years. It is measured in presence.</p>
+      </div>
+      <div class="mt-children">
+        <p class="reveal prose-body">You can know someone for a decade and never really be there for them. You can know someone for two years and be the first person they think to call. Time is a terrible unit of measurement for love. Presence is a better one.</p>
+        <p class="reveal prose-body">The real test is never the big occasion. Anyone can show up for a celebration. The test is the ordinary Tuesday, the unanswered mood, the version of you that is not fun to be around. The people who stay through that are the ones who actually count, and there are never as many of them as we hope. That is fine. There are never supposed to be.</p>
+        <div class="reveal reveal-slow pull-quote">
+          Love is not measured by grand moments.<br>
+          <span style="color:rgba(201,162,95,0.9);">It is measured by who remains.</span>
+        </div>
+        <div class="people-grid">
+          <div class="reveal people-card"><span class="people-card-dot"></span><h3 class="people-card-title">Family</h3><p class="people-card-line">The people who saw every unfinished version of you and never once asked you to be further along than you were.</p></div>
+          <div class="reveal people-card" style="transition-delay:200ms"><span class="people-card-dot"></span><h3 class="people-card-title">Friends</h3><p class="people-card-line">The ones who show up without being invited, who argue about nothing for an hour, who make a normal evening feel like something worth remembering.</p></div>
+          <div class="reveal people-card" style="transition-delay:400ms"><span class="people-card-dot"></span><h3 class="people-card-title">Flora</h3><p class="people-card-line">The person who turns an ordinary day into something you want to tell someone about. That is not a small thing. That is most of what a good life is made of.</p></div>
+        </div>
+        <p class="reveal prose-body">What I have always respected about you is that you are the same person in every room. You do not perform for people. You do not manage your image. You are just there — actually there — and anyone who has been on the receiving end of that knows how rare it is.</p>
+        <p class="reveal prose-body">Real friendship has a particular texture. It is being able to sit in silence without needing to fill it. It is laughing at something so specific and so stupid that explaining it to anyone else would ruin it. It is knowing when not to ask, and knowing when to ask twice. It is the total absence of pretending.</p>
+        <p class="reveal prose-body">And it survives distance. That is the thing people get wrong about it. Weeks can pass, months can pass, life gets loud and everyone gets busy, and then one conversation puts everything back exactly where it was. Nothing needs rebuilding. It was never taken apart.</p>
+        <p class="reveal prose-body">The people who stay are not the ones who promise to. They are just the ones who quietly keep choosing you, over and over, without ever making an announcement out of it. And you have been that person for other people more often than you probably realise. That is not luck. That is character.</p>
+        <p class="reveal prose-body">One day, a long time from now, you will look back and the names will have thinned out into a short, permanent list. Everything else will have been weather. That list is the actual measure of a life.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 7: THE SHAPE OF TODAY -->
+  <section id="today" class="chapter-section" data-chapter="The Shape of Today">
+    <div class="chapter-inner">
+      <p class="reveal chapter-label mt-label" style="font-size:0.55rem;color:rgba(201,162,95,0.7);">Chapter Seven</p>
+      <h2 class="chapter-title title-glow word-reveal" data-text="The Shape of Today"></h2>
+      <div class="reveal" style="transition-delay:420ms"><div class="hairline mt-hairline"></div></div>
+      <div class="reveal" style="transition-delay:560ms">
+        <p class="chapter-epigraph">So — today. July 29. Another year around a very old star.</p>
+      </div>
+      <div class="mt-children">
+        <p class="reveal prose-body">I want to say something about how much you have grown, and I want to say it properly, because the usual way people say it is lazy. They point at results. Grades, wins, plans, the visible things. Those are the easiest to talk about and the least interesting.</p>
+        <p class="reveal prose-body">What has actually changed about you is your character, and that is a much harder thing to build. You have become patient in situations where patience is not the obvious choice. You have become someone who listens all the way to the end of a sentence. You have become steadier, and steadiness in a person your age is genuinely uncommon.</p>
+        <div class="reveal reveal-slow pull-quote">The person you are becoming will always matter more than anything you will ever own.</div>
+        <p class="reveal prose-body">You are kind in a way that does not ask for credit — which is the only version of kindness that means anything. You are curious about things that will never make you money, and you keep that curiosity anyway, which tells me you are still fully alive in there. You are loyal in a way that has cost you something at least once, and you stayed loyal regardless.</p>
+        <p class="reveal prose-body">You still get excited. That deserves its own sentence, because most people lose it. Somewhere in the middle of growing up, a lot of people decide that enthusiasm is embarrassing and they trade it for a permanent, protective coolness. You did not do that. You still get properly, visibly invested in the things you love, and it is one of the best things about you.</p>
+        <p class="reveal prose-body">And you are hopeful. Not naively — you have seen enough not to be naive. Hopeful in the harder way, the way that requires a decision. You know how things can go and you still expect something good. That is not innocence. That is a choice you keep making.</p>
+        <p class="reveal prose-body">If I could get you to believe one thing today, it would be this: you are further along than you think you are. The measuring stick you use for yourself is not calibrated correctly. It never is, for anyone. You are comparing your inside to everyone else's outside, and it is not a fair fight.</p>
+        <p class="reveal prose-body">From out here, from where the rest of us stand, you look like someone who is doing this well. Not perfectly. Nobody does it perfectly. But well — thoughtfully, decently, with an intact heart. That is the whole assignment.</p>
+        <p class="reveal prose-body">So today is not really about the number. It is just a good excuse to say something out loud that is true on every other day of the year too.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE INTERLUDE -->
+  <section id="timeline">
+    <div class="timeline-inner">
+      <p class="reveal chapter-label" style="font-size:0.55rem;color:rgba(201,162,95,0.7);margin-bottom:1.75rem;">Interlude</p>
+      <h2 class="chapter-title title-glow word-reveal" data-text="The Line We Walk"></h2>
+      <div class="reveal" style="transition-delay:420ms"><div class="hairline mt-hairline"></div></div>
+      <div class="timeline-track-wrap" id="timeline-track">
+        <div class="timeline-rail"></div>
+        <div class="timeline-fill" id="timeline-fill" style="height:calc(100% - 1rem);transform:scaleY(0);"></div>
+        <ol class="timeline-list" id="timeline-list">
+          <li class="timeline-item">
+            <span class="timeline-dot" data-at="0.07"></span>
+            <div class="timeline-node-inner reveal">
+              <p class="timeline-node-label">Beginning</p>
+              <h3 class="timeline-node-title">A small, complete world</h3>
+              <p class="timeline-node-body">Short days, long afternoons, and absolutely no idea that any of it was going to matter later.</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-dot" data-at="0.27"></span>
+            <div class="timeline-node-inner reveal">
+              <p class="timeline-node-label">Growth</p>
+              <h3 class="timeline-node-title">Learning the hard way</h3>
+              <p class="timeline-node-body">Failures that felt final at the time, and turned out to be the only real teachers in the room.</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-dot" data-at="0.47"></span>
+            <div class="timeline-node-inner reveal">
+              <p class="timeline-node-label">Dreams</p>
+              <h3 class="timeline-node-title">Wanting something specific</h3>
+              <p class="timeline-node-body">The moment the future stopped being a vague shape and became a thing you could actually name.</p>
+            </div>
+          </li>
+          <li class="timeline-item">
+            <span class="timeline-dot" data-at="0.67"></span>
+            <div class="timeline-node-inner reveal">
+              <p class="timeline-node-label">Today</p>
+              <h3 class="timeline-node-title">Standing here</h3>
+              <p class="timeline-node-body">Older, steadier, still curious. Carrying more than before and complaining about it less.</p>
+            </div>
+          </li>
+          <li class="timeline-item" style="padding-bottom:0">
+            <span class="timeline-dot" data-at="0.87"></span>
+            <div class="timeline-node-inner reveal">
+              <p class="timeline-node-label">Tomorrow</p>
+              <h3 class="timeline-node-title">Still unwritten</h3>
+              <p class="timeline-node-body">The best part: none of it has happened yet, and all of it is still available to you.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 8: A SKY FULL OF TOMORROWS -->
+  <div class="tomorrow-wrap" style="position:relative;">
+    <canvas id="tomorrow-stars-canvas" style="position:absolute;inset:0;pointer-events:none;" aria-hidden="true"></canvas>
+    <div style="position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 40%,rgba(18,22,34,0.55),rgba(0,0,0,0.75));pointer-events:none;"></div>
+    <section id="tomorrow" class="chapter-section" data-chapter="A Sky Full of Tomorrows">
+      <div class="chapter-inner">
+        <p class="reveal chapter-label mt-label" style="font-size:0.55rem;color:rgba(201,162,95,0.7);">Chapter Eight</p>
+        <h2 class="chapter-title title-glow word-reveal" data-text="A Sky Full of Tomorrows"></h2>
+        <div class="reveal" style="transition-delay:420ms"><div class="hairline mt-hairline"></div></div>
+        <div class="reveal" style="transition-delay:560ms">
+          <p class="chapter-epigraph">Here is the part nobody says clearly enough: most of your life has not happened yet.</p>
+        </div>
+        <div class="mt-children">
+          <p class="reveal prose-body">Not the good parts, not the hard parts, not the people. Somewhere out there is a city you have not walked through yet, a room you have not sat in, a conversation that will change how you think about something you are currently certain about. It already exists. You simply have not arrived at it.</p>
+          <p class="reveal prose-body">That is what tomorrow actually is. Not a plan. Not a deadline. An unexplored place, enormous and quiet, waiting to be walked into.</p>
+          <div style="margin:5rem 0 7rem;">
+            <div class="reveal reveal-slow" style="padding-bottom:3.5rem;"><p class="open-line">There are still places you haven't seen.</p></div>
+            <div class="reveal reveal-slow" style="padding-bottom:3.5rem;transition-delay:320ms"><p class="open-line">Dreams you haven't built.</p></div>
+            <div class="reveal reveal-slow" style="padding-bottom:3.5rem;transition-delay:640ms"><p class="open-line">People you haven't inspired.</p></div>
+            <div class="reveal reveal-slow" style="transition-delay:960ms"><p class="open-line">Stories still waiting.</p></div>
+          </div>
+          <p class="reveal prose-body">There are versions of you that have not been discovered yet. That is not a metaphor. The person you will be at thirty is currently unavailable to you — he has knowledge you have not earned, calm you have not learned, and a sense of humour built from jokes that have not been made yet. You will meet him eventually. I think you will like him.</p>
+          <p class="reveal prose-body">There will be new mistakes, and they will be better mistakes than the old ones, because they will come from trying bigger things. There will be new people who become permanent so quietly that you will not notice it happening. There will be a night, some ordinary night years from now, where you laugh so hard about something so stupid that you will still be thinking about it in the morning.</p>
+          <p class="reveal prose-body">And there will be hard chapters again. I am not going to pretend otherwise. But you already know the shape of those, and you already know that you outlast them. You have the record. You keep the record.</p>
+          <p class="reveal prose-body">Do not spend too much of it planning. The best parts of anyone's life were unscheduled. Leave room for the unplanned things — they are usually the ones you end up building a personality out of.</p>
+          <div class="reveal reveal-slow pull-quote" style="text-align:center;">
+            <span style="color:rgba(201,162,95,0.9);">Keep going.</span><br>
+            <span style="color:rgba(242,236,225,0.6);font-size:clamp(1.3rem,2.5vw,1.875rem);">The sky is genuinely enormous and almost none of it has been used.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- THE LETTER -->
+  <section id="letter">
+    <div class="letter-gold-bg"></div>
+    <div class="letter-inner">
+      <p class="reveal chapter-label" style="font-size:0.55rem;color:rgba(201,162,95,0.7);margin-bottom:1.75rem;">The Letter</p>
+      <h2 class="chapter-title title-glow word-reveal" data-text="Something I wanted written down" style="font-size:clamp(2rem,5vw,3.75rem);"></h2>
+      <div class="reveal" style="transition-delay:420ms"><div class="hairline mt-hairline"></div></div>
+      <div class="reveal" style="transition-delay:560ms"><p class="letter-salutation">Vedant,</p></div>
+      <div class="mt-12 space-y-9">
+        <div class="reveal"><p class="letter-beat">I have started this letter four separate times.</p></div>
+        <div class="reveal"><p class="letter-body">The problem with writing something for a person you actually know is that all the good words have already been used by people who did not mean them. Every phrase I reach for sounds like a card someone bought at the last minute. So I am going to avoid the beautiful ones and just tell you the truth slowly, and hope that lands better than something clever would have.</p></div>
+        <div class="reveal"><p class="letter-beat">Thank you.</p></div>
+        <div class="reveal"><p class="letter-body">That is the first thing, and honestly it could be the entire letter. Thank you for the years. Thank you for the hundreds of unremarkable hours that turned out to be the ones I remember most clearly. Thank you for every conversation that did not need to happen and happened anyway.</p></div>
+        <div class="reveal"><p class="letter-body">Thank you for the times you showed up without being asked. Those count more than you know. People talk a lot about loyalty, but almost nobody practises the boring version of it — the version where you are simply present, repeatedly, without any occasion to justify it. You have always been good at the boring version. It is the only one that matters.</p></div>
+        <div class="reveal"><p class="letter-body">There is a difference between liking someone and respecting them. Liking is easy and often accidental. Respect has to be earned in small increments, usually when nobody is looking, and it can be lost in a single afternoon. I have watched you handle things I know were heavier than you let on. I have watched you stay decent in situations that would have justified being anything but.</p></div>
+        <div class="reveal"><p class="letter-beat">That is where the respect comes from. Not the achievements. The conduct.</p></div>
+        <div class="reveal"><p class="letter-body">I want to say I am proud of you, and I want to be careful about how I say it, because pride can sound condescending when it is not meant that way. So let me be precise: I am proud of the way you have grown without becoming hard. A lot of people toughen up by shutting down. You did not do that. You got stronger and stayed warm, and that combination is genuinely rare.</p></div>
+        <div class="reveal"><p class="letter-body">We are at the age where time starts behaving strangely. Years used to be long. Now they arrive in a group, all at once, and you look up and it has been three of them since something you still describe as recent. I do not think anyone ever gets used to that.</p></div>
+        <div class="reveal"><p class="letter-beat">Which is why I wanted to write this down instead of saying it.</p></div>
+        <div class="reveal"><p class="letter-body">Because spoken words evaporate. You say something important on a Tuesday and by Thursday it is a vague feeling. But writing holds still. This will say the same thing in ten years that it says today, and I want a version of this to exist that time cannot edit.</p></div>
+        <div class="reveal"><p class="letter-body">I remember things you have completely forgotten. That is one of the quiet privileges of knowing someone for a long time — you become a custodian of the parts of them they misplaced. Small things. The way you talked about something you cared about before you learned to be casual about it. A specific laugh. A day that meant nothing at the time.</p></div>
+        <div class="reveal"><p class="letter-body">I am keeping those. You do not have to do anything about it. Just know that somewhere outside of you, there is a record of who you were, held carefully by someone who liked that person very much.</p></div>
+        <div class="reveal"><p class="letter-body">About the future — I do not have advice. Everybody your age is drowning in advice and almost none of it is calibrated for an actual human being. So instead, just two observations.</p></div>
+        <div class="reveal"><p class="letter-body">The first: you are further along than you feel. You are measuring yourself against a standard you invented during a bad week, and it is not accurate. From out here, you look like someone doing this thoughtfully.</p></div>
+        <div class="reveal"><p class="letter-body">The second: keep the parts of yourself that are not useful. The curiosity that leads nowhere. The interests that will never earn anything. The enthusiasm that is slightly too much for the occasion. Those things are not decoration — they are the actual person. Everything else is logistics.</p></div>
+        <div class="reveal"><p class="letter-body">I hope the next years are kind to you. Not easy, because easy years make dull people, and you deserve a more interesting story than that. But kind. I hope the hard chapters arrive with enough space between them. I hope you get the specific things you want and not just the general ones.</p></div>
+        <div class="reveal"><p class="letter-beat">I hope you end up somewhere you did not expect and find it suits you.</p></div>
+        <div class="reveal"><p class="letter-beat">I hope you keep the people who stayed, and that they keep you.</p></div>
+        <div class="reveal"><p class="letter-body">And I hope that on some ordinary evening years from now, in the middle of a life I cannot picture yet, you get a strange, warm moment of realising that things worked out in a way you did not see coming.</p></div>
+        <div class="reveal"><p class="letter-beat">That is all I want for you. Not success. That.</p></div>
+        <div class="reveal"><p class="letter-body">Whatever happens, whatever changes, whatever version of yourself you end up becoming — I will have been glad to be here for this part of it. The unremarkable part. The part before anything was decided.</p></div>
+      </div>
+      <div class="reveal reveal-slow" style="transition-delay:200ms"><p class="letter-sign">I'm glad the world got a Vedant.</p></div>
+      <div class="reveal" style="transition-delay:400ms;margin-top:4rem;display:flex;align-items:center;gap:1.25rem;">
+        <span class="hairline" style="width:4rem;"></span>
+        <p class="chapter-label" style="font-size:0.5rem;color:rgba(126,122,114,0.7);">July 29</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL SCENE -->
+  <section id="final">
+    <canvas id="final-stars-canvas" style="position:absolute;inset:0;pointer-events:none;" aria-hidden="true"></canvas>
+    <div class="final-gradient"></div>
+    <div class="final-inner">
+      <div class="reveal reveal-slow"><p class="final-line">No matter how much life changes&hellip;</p></div>
+      <div class="reveal reveal-slow" style="transition-delay:900ms;margin-top:2.5rem;"><p class="final-line">some people remain unforgettable.</p></div>
+      <div class="visualizer-wrap reveal" style="transition-delay:1800ms;">
+        <canvas id="visualizer-canvas" style="width:100%;height:100%;"></canvas>
+      </div>
+      <div class="reveal reveal-slow" style="transition-delay:2400ms;margin-top:6rem;"><p class="final-title">Happy Birthday, Vedant.</p></div>
+      <div class="reveal" style="transition-delay:3200ms;margin-top:2.5rem;">
+        <p class="chapter-label" style="font-size:0.55rem;color:rgba(126,122,114,0.7);">July 29</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENDING SEQUENCE -->
+  <section id="ending">
+    <div style="max-width:48rem;margin:0 auto;text-align:center;">
+      <div class="ending-line-wrap-long"><div class="reveal reveal-slow"><p class="ending-line">Some people change our lives loudly.</p></div></div>
+      <div class="ending-line-wrap-short"><div class="reveal reveal-slow"><p class="ending-line">Others change them quietly.</p></div></div>
+      <div class="ending-line-wrap-short"><div class="reveal reveal-slow"><p class="ending-line">They never ask to be remembered.</p></div></div>
+      <div class="ending-line-wrap-long"><div class="reveal reveal-slow"><p class="ending-line">Yet somehow&hellip;</p></div></div>
+      <div class="ending-line-wrap-long"><div class="reveal reveal-slow"><p class="ending-line accent">they become impossible to forget.</p></div></div>
+      <div class="ending-line-wrap-short"><div class="reveal reveal-slow"><p class="ending-line">Happy Birthday.</p></div></div>
+      <div class="ending-line-wrap-short"><div class="reveal reveal-slow"><p class="ending-line accent">Vedant.</p></div></div>
+      <div class="ending-line-wrap-short"><div class="reveal reveal-slow"><p class="ending-line">Thank you&hellip;</p></div></div>
+      <div class="ending-line-wrap-long"><div class="reveal reveal-slow"><p class="ending-line accent">for still being here.</p></div></div>
+    </div>
+    <!-- Title Reformation -->
+    <div id="title-reformation">
+      <canvas id="particle-end-canvas" style="position:absolute;inset:0;" aria-hidden="true" aria-label="STILL HERE."></canvas>
+    </div>
+    <!-- Blackout -->
+    <div id="blackout">
+      <div id="blackout-bg"></div>
+      <div id="blackout-content">
+        <span class="cursor-blink" style="display:block;width:9px;height:20px;background:rgba(242,236,225,0.7);" aria-hidden="true"></span>
+        <p id="blackout-line">The story continues&hellip;</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ===================== LOADER ===================== -->
+<div id="loader" aria-live="polite" role="status">
+  <div id="loader-canvas-wrap"><canvas id="particle-loader-canvas" style="width:100%;height:100%;"></canvas></div>
+  <div id="loader-vignette"></div>
+  <div id="loader-text">
+    <p class="loader-line" id="ll1">Some people enter our lives…</p>
+    <p class="loader-line" id="ll2">…and quietly change everything.</p>
+    <p id="loader-dedication">This is for Vedant.</p>
+  </div>
+  <div class="film-grain"></div>
+  <button id="skip-btn" type="button">Skip</button>
+</div>
+
+<!-- ===================== EASTER EGG ===================== -->
+<div id="easter-egg" aria-live="polite">
+  <div id="easter-egg-box" class="glass">
+    <p id="easter-egg-text"></p>
+  </div>
+</div>
+
+<script>
+// ===================== PARTICLE TEXT ENGINE =====================
+function createParticleEngine(canvas, text, scale, letterSpacing) {
+  const ctx = canvas.getContext('2d');
+  let width=0, height=0, dpr=1, particles=[], raf=0, t=0;
+  let activeFlag=false, dissolveFlag=false;
+
+  function sampleTargets() {
+    const off = document.createElement('canvas');
+    off.width = Math.max(1,Math.floor(width));
+    off.height = Math.max(1,Math.floor(height));
+    const octx = off.getContext('2d');
+    if(!octx) return [];
+    const fontSize = Math.max(26,Math.min(width*scale,height*0.55,190));
+    octx.fillStyle='#fff'; octx.textAlign='center'; octx.textBaseline='middle';
+    try { octx.letterSpacing = `${fontSize*letterSpacing}px`; } catch(e){}
+    octx.font = `300 ${fontSize}px "Cormorant Garamond", Georgia, serif`;
+    let measured = octx.measureText(text).width;
+    if(measured > width*0.9) {
+      const shrunk = fontSize*(width*0.9/measured);
+      try { octx.letterSpacing = `${shrunk*letterSpacing}px`; } catch(e){}
+      octx.font = `300 ${shrunk}px "Cormorant Garamond", Georgia, serif`;
+    }
+    octx.fillText(text, width/2, height/2);
+    let data;
+    try { data = octx.getImageData(0,0,off.width,off.height).data; } catch(e){ return []; }
+    const maxPts = width<640?620:1350;
+    let step = 4, pts=[];
+    for(let attempt=0;attempt<5;attempt++) {
+      pts=[];
+      for(let y=0;y<off.height;y+=step) for(let x=0;x<off.width;x+=step) {
+        if(data[(y*off.width+x)*4+3]>140) pts.push({x,y});
+      }
+      if(pts.length<=maxPts) break;
+      step++;
+    }
+    return pts;
+  }
+
+  function build() {
+    const parent = canvas.parentElement;
+    const rect = parent.getBoundingClientRect();
+    width = Math.max(1,rect.width); height = Math.max(1,rect.height);
+    dpr = Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.floor(width*dpr); canvas.height=Math.floor(height*dpr);
+    canvas.style.width=`${width}px`; canvas.style.height=`${height}px`;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const targets = sampleTargets();
+    particles = targets.map(p => {
+      const ang=Math.random()*Math.PI*2, rad=Math.max(width,height)*(0.35+Math.random()*0.7);
+      return {x:width/2+Math.cos(ang)*rad,y:height/2+Math.sin(ang)*rad*0.6,tx:p.x,ty:p.y,vx:0,vy:0,a:0,size:0.55+Math.random()*1.05,wob:Math.random()*Math.PI*2,gold:Math.random()>0.9};
+    });
+  }
+
+  function render() {
+    t+=0.016; ctx.clearRect(0,0,width,height);
+    const gathering=activeFlag&&!dissolveFlag, releasing=dissolveFlag;
+    for(let i=0;i<particles.length;i++) {
+      const p=particles[i];
+      if(gathering) {
+        p.x+=(p.tx-p.x)*0.038+Math.sin(t*0.9+p.wob)*0.06;
+        p.y+=(p.ty-p.y)*0.038+Math.cos(t*0.8+p.wob)*0.06;
+        p.a+=(1-p.a)*0.03;
+      } else if(releasing) {
+        if(p.vx===0&&p.vy===0) { const a=Math.random()*Math.PI*2,s=0.25+Math.random()*1.1; p.vx=Math.cos(a)*s; p.vy=Math.sin(a)*s-0.28; }
+        p.x+=p.vx; p.y+=p.vy; p.vy-=0.0035; p.a*=0.982;
+      } else {
+        p.x+=Math.sin(t*0.5+p.wob)*0.12; p.y+=Math.cos(t*0.42+p.wob)*0.1;
+        p.a+=(0.12-p.a)*0.02;
+      }
+      if(p.a<0.004) continue;
+      ctx.beginPath();
+      ctx.fillStyle=p.gold?`rgba(201,162,95,${p.a})`:`rgba(242,236,225,${p.a*0.92})`;
+      ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill();
+    }
+    raf=requestAnimationFrame(render);
+  }
+
+  function start() { build(); window.addEventListener('resize',build); raf=requestAnimationFrame(render); }
+  function stop() { cancelAnimationFrame(raf); window.removeEventListener('resize',build); }
+  function setActive(v) { activeFlag=v; }
+  function setDissolve(v) { dissolveFlag=v; }
+  return {start,stop,setActive,setDissolve};
+}
+
+// ===================== CINEMATIC BACKGROUND =====================
+(function() {
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let width,height,dpr,stars=[],dust=[],raf=0;
+  const mouse={x:-9999,y:-9999,tx:-9999,ty:-9999};
+  let scrollY=window.scrollY,targetScroll=scrollY;
+
+  function build() {
+    width=window.innerWidth; height=window.innerHeight;
+    dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.floor(width*dpr); canvas.height=Math.floor(height*dpr);
+    canvas.style.width=`${width}px`; canvas.style.height=`${height}px`;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const sc=Math.round(Math.min(260,Math.max(70,width*height/7800)));
+    stars=new Array(sc).fill(0).map(()=>{const d=Math.random();return{x:Math.random()*width,y:Math.random()*height*1.6,depth:d,r:0.35+d*1.25,phase:Math.random()*Math.PI*2,speed:0.4+Math.random()*1.1,warm:Math.random()>0.82};});
+    const dc=Math.round(Math.min(90,Math.max(26,width/16)));
+    dust=new Array(dc).fill(0).map(()=>({x:Math.random()*width,y:Math.random()*height,vx:(Math.random()-0.5)*0.13,vy:-0.05-Math.random()*0.13,r:0.7+Math.random()*1.7,a:0.12+Math.random()*0.3}));
+  }
+
+  window.addEventListener('resize',build);
+  window.addEventListener('mousemove',e=>{mouse.tx=e.clientX;mouse.ty=e.clientY;},{passive:true});
+  window.addEventListener('mouseleave',()=>{mouse.tx=-9999;mouse.ty=-9999;});
+  window.addEventListener('scroll',()=>{targetScroll=window.scrollY;},{passive:true});
+  window.addEventListener('touchmove',e=>{if(e.touches[0]){mouse.tx=e.touches[0].clientX;mouse.ty=e.touches[0].clientY;}},{passive:true});
+
+  build();
+  let t=0;
+  function render() {
+    t+=0.0075; scrollY+=(targetScroll-scrollY)*0.08;
+    if(mouse.tx>-9000){mouse.x=mouse.x<-9000?mouse.tx:mouse.x+(mouse.tx-mouse.x)*0.1;mouse.y=mouse.y<-9000?mouse.ty:mouse.y+(mouse.ty-mouse.y)*0.1;}else{mouse.x=-9999;mouse.y=-9999;}
+    ctx.clearRect(0,0,width,height);
+    const mx=mouse.x>-9000?mouse.x/width-0.5:0,my=mouse.y>-9000?mouse.y/height-0.5:0;
+    for(let i=0;i<stars.length;i++){
+      const s=stars[i],par=0.02+s.depth*0.11;
+      let y=s.y-scrollY*par,span=height*1.6;y=(y%span+span)%span;
+      const x=s.x+mx*(6+s.depth*26),yy=y+my*(4+s.depth*16);
+      if(yy<-10||yy>height+10)continue;
+      const tw=0.45+Math.sin(t*s.speed*2.2+s.phase)*0.42,alpha=Math.max(0,(0.18+s.depth*0.62)*tw);
+      ctx.beginPath();ctx.fillStyle=s.warm?`rgba(201,162,95,${alpha})`:`rgba(228,233,244,${alpha})`;ctx.arc(x,yy,s.r,0,Math.PI*2);ctx.fill();
+      if(s.depth>0.86){ctx.beginPath();ctx.fillStyle=s.warm?`rgba(201,162,95,${alpha*0.09})`:`rgba(200,214,240,${alpha*0.09})`;ctx.arc(x,yy,s.r*6,0,Math.PI*2);ctx.fill();}
+    }
+    for(let i=0;i<dust.length;i++){
+      const d=dust[i];d.x+=d.vx;d.y+=d.vy;
+      if(mouse.x>-9000){const dx=d.x-mouse.x,dy=d.y-mouse.y,d2=dx*dx+dy*dy;if(d2<20000&&d2>0.01){const dist=Math.sqrt(d2),push=(1-dist/141)*1.5;d.x+=dx/dist*push;d.y+=dy/dist*push;}}
+      if(d.y<-20){d.y=height+12;d.x=Math.random()*width;}if(d.x<-20)d.x=width+12;if(d.x>width+20)d.x=-12;
+      ctx.beginPath();ctx.fillStyle=`rgba(242,236,225,${d.a})`;ctx.arc(d.x,d.y,d.r,0,Math.PI*2);ctx.fill();
+    }
+    ctx.lineWidth=0.5;
+    for(let i=0;i<dust.length;i++)for(let j=i+1;j<dust.length;j++){const a=dust[i],b=dust[j],dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy;if(d2<13000){ctx.strokeStyle=`rgba(201,162,95,${(1-d2/13000)*0.075})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}
+    raf=requestAnimationFrame(render);
+  }
+  raf=requestAnimationFrame(render);
+})();
+
+// ===================== DEEP STARS ENGINE =====================
+function initDeepStars(canvas, density) {
+  const ctx=canvas.getContext('2d');
+  let w=0,h=0,raf=0,visible=false,stars=[],t=0;
+  function build(){
+    const parent=canvas.parentElement,rect=parent.getBoundingClientRect();
+    w=Math.max(1,rect.width);h=Math.max(1,rect.height);
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.floor(w*dpr);canvas.height=Math.floor(h*dpr);
+    canvas.style.width=`${w}px`;canvas.style.height=`${h}px`;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const count=Math.round(Math.min(220,Math.max(60,w*h/11000*density)));
+    stars=new Array(count).fill(0).map(()=>{const z=Math.random();return{x:Math.random()*w,y:Math.random()*h,z,r:0.4+z*2.1,phase:Math.random()*Math.PI*2};});
+  }
+  function render(){
+    if(!visible){raf=requestAnimationFrame(render);return;}
+    t+=0.006;ctx.clearRect(0,0,w,h);
+    for(let i=0;i<stars.length;i++){
+      const s=stars[i];s.y-=0.035+s.z*0.09;if(s.y<-6){s.y=h+6;s.x=Math.random()*w;}
+      const tw=0.5+Math.sin(t*(0.8+s.z)*2+s.phase)*0.45,alpha=(0.16+s.z*0.6)*tw;
+      ctx.beginPath();ctx.fillStyle=`rgba(232,238,250,${alpha})`;ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+      if(s.z>0.78){const g=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*12);g.addColorStop(0,`rgba(200,214,240,${alpha*0.16})`);g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(s.x,s.y,s.r*12,0,Math.PI*2);ctx.fill();}
+    }
+    raf=requestAnimationFrame(render);
+  }
+  build();
+  const io=new IntersectionObserver(e=>{visible=e[0].isIntersecting;},{threshold:0});
+  io.observe(canvas.parentElement);
+  window.addEventListener('resize',build);
+  raf=requestAnimationFrame(render);
+}
+initDeepStars(document.getElementById('tomorrow-stars-canvas'),1.25);
+initDeepStars(document.getElementById('final-stars-canvas'),1.6);
+
+// ===================== RAIN =====================
+(function(){
+  const canvas=document.getElementById('rain-canvas');
+  const ctx=canvas.getContext('2d');
+  let w=0,h=0,raf=0,visible=false,drops=[];
+  function build(){
+    const parent=canvas.parentElement,rect=parent.getBoundingClientRect();
+    w=Math.max(1,rect.width);h=Math.max(1,rect.height);
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.floor(w*dpr);canvas.height=Math.floor(h*dpr);
+    canvas.style.width=`${w}px`;canvas.style.height=`${h}px`;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const count=Math.round(Math.min(160,Math.max(50,w/8)));
+    drops=new Array(count).fill(0).map(()=>({x:Math.random()*w,y:Math.random()*h,len:14+Math.random()*46,spd:1.4+Math.random()*3.4,a:0.05+Math.random()*0.16}));
+  }
+  function render(){
+    if(!visible){raf=requestAnimationFrame(render);return;}
+    ctx.clearRect(0,0,w,h);ctx.lineWidth=0.8;
+    for(let i=0;i<drops.length;i++){
+      const d=drops[i];d.y+=d.spd;d.x+=d.spd*0.14;
+      if(d.y>h){d.y=-d.len;d.x=Math.random()*w;}if(d.x>w)d.x=-4;
+      ctx.strokeStyle=`rgba(190,205,230,${d.a})`;ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x-d.len*0.12,d.y+d.len);ctx.stroke();
+    }
+    raf=requestAnimationFrame(render);
+  }
+  build();
+  const io=new IntersectionObserver(e=>{visible=e[0].isIntersecting;},{threshold:0});
+  io.observe(canvas.parentElement);
+  window.addEventListener('resize',build);
+  raf=requestAnimationFrame(render);
+})();
+
+// ===================== VISUALIZER =====================
+(function(){
+  const canvas=document.getElementById('visualizer-canvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  let w=0,h=0,raf=0,visible=false,t=0,bars=0,seeds=[];
+  function build(){
+    const parent=canvas.parentElement,rect=parent.getBoundingClientRect();
+    w=Math.max(1,rect.width);h=Math.max(1,rect.height);
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.floor(w*dpr);canvas.height=Math.floor(h*dpr);
+    canvas.style.width=`${w}px`;canvas.style.height=`${h}px`;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    bars=Math.max(24,Math.min(72,Math.floor(w/16)));
+    seeds=new Array(bars).fill(0).map(()=>Math.random()*Math.PI*2);
+  }
+  function render(){
+    if(!visible){raf=requestAnimationFrame(render);return;}
+    t+=0.011;ctx.clearRect(0,0,w,h);
+    const gap=w/bars,barW=Math.max(1.2,gap*0.22),mid=h/2;
+    for(let i=0;i<bars;i++){
+      const cd=Math.abs(i-(bars-1)/2)/((bars-1)/2),env=Math.pow(1-cd,1.5);
+      const wave=Math.sin(t*1.6+seeds[i])*0.5+Math.sin(t*0.7+i*0.32)*0.34+Math.sin(t*2.7+i*0.11)*0.16;
+      const hh=Math.max(1.5,h*0.42*env*(0.28+Math.abs(wave))),x=gap*i+gap/2-barW/2,alpha=0.1+env*0.45;
+      ctx.fillStyle=`rgba(242,236,225,${alpha})`;ctx.fillRect(x,mid-hh/2,barW,hh);
+      ctx.fillStyle=`rgba(201,162,95,${alpha*0.35})`;ctx.fillRect(x,mid-hh/2-1,barW,1);
+    }
+    raf=requestAnimationFrame(render);
+  }
+  build();
+  const io=new IntersectionObserver(e=>{visible=e[0].isIntersecting;},{threshold:0});
+  io.observe(canvas.parentElement);
+  window.addEventListener('resize',build);
+  raf=requestAnimationFrame(render);
+})();
+
+// ===================== INTERSECTION OBSERVER FOR REVEALS =====================
+(function(){
+  function observeReveal(el,threshold=0.18,rootMargin='0px 0px -12% 0px'){
+    if(typeof IntersectionObserver==='undefined'){el.classList.add('is-visible');return;}
+    const io=new IntersectionObserver(entries=>{
+      if(entries[0].isIntersecting){el.classList.add('is-visible');io.disconnect();}
+    },{threshold,rootMargin});
+    io.observe(el);
+  }
+  document.querySelectorAll('.reveal').forEach(el=>{
+    const thresh = el.classList.contains('reveal-slow')?0.15:0.18;
+    observeReveal(el,thresh);
+  });
+})();
+
+// ===================== WORD REVEAL =====================
+(function(){
+  document.querySelectorAll('.word-reveal').forEach(el=>{
+    const text=el.dataset.text||el.textContent;
+    el.innerHTML='';
+    el.setAttribute('aria-label',text);
+    text.split(' ').forEach((word,i)=>{
+      const span=document.createElement('span');
+      span.className='word';
+      span.setAttribute('aria-hidden','true');
+      span.style.transitionDelay=`${i*120}ms`;
+      span.textContent=word+(i<text.split(' ').length-1?'\u00A0':'');
+      el.appendChild(span);
+    });
+    const io=new IntersectionObserver(entries=>{
+      if(entries[0].isIntersecting){el.querySelectorAll('.word').forEach(w=>w.classList.add('is-visible'));io.disconnect();}
+    },{threshold:0.3});
+    io.observe(el);
+  });
+})();
+
+// ===================== NAVIGATION =====================
+const SECTIONS = [
+  {id:'hero',label:'Still Here'},
+  {id:'beginning',label:'The Beginning'},
+  {id:'growing',label:'Growing Quietly'},
+  {id:'become',label:'The People We Become'},
+  {id:'worlds',label:'Small Worlds'},
+  {id:'weight',label:'The Weight We Carry'},
+  {id:'people',label:'People Who Stay'},
+  {id:'today',label:'The Shape of Today'},
+  {id:'timeline',label:'The Line We Walk'},
+  {id:'tomorrow',label:'A Sky Full of Tomorrows'},
+  {id:'letter',label:'The Letter'},
+  {id:'final',label:'Unforgettable'},
+  {id:'ending',label:'Still Here'}
+];
+
+(function(){
+  const progress=document.getElementById('nav-progress');
+  const bar=document.getElementById('nav-bar');
+  const dots=document.getElementById('chapter-dots');
+  const counter=document.getElementById('section-counter');
+
+  SECTIONS.forEach(s=>{
+    const a=document.createElement('a');
+    a.href=`#${s.id}`;a.className='dot-link';a.dataset.id=s.id;
+    a.innerHTML=`<span class="dot-label">${s.label}</span><span class="dot-pip"></span>`;
+    dots.appendChild(a);
+  });
+
+  let activeId=SECTIONS[0].id;
+  function updateCounter(){
+    const idx=SECTIONS.findIndex(s=>s.id===activeId);
+    counter.textContent=`${String(idx+1).padStart(2,'0')} / ${String(SECTIONS.length).padStart(2,'0')}`;
+  }
+
+  let ticking=false,raf=0;
+  function update(){
+    const doc=document.documentElement,max=doc.scrollHeight-window.innerHeight;
+    const p=max>0?Math.min(1,window.scrollY/max):0;
+    bar.style.transform=`scaleX(${p})`;
+    ticking=false;
+  }
+  window.addEventListener('scroll',()=>{if(!ticking){ticking=true;raf=requestAnimationFrame(update);}},{passive:true});
+  window.addEventListener('resize',update);
+  update();
+
+  SECTIONS.forEach(s=>{
+    const el=document.getElementById(s.id);
+    if(!el)return;
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting){activeId=s.id;document.querySelectorAll('.dot-link').forEach(a=>{a.classList.toggle('active',a.dataset.id===s.id)});updateCounter();}});
+    },{rootMargin:'-45% 0px -45% 0px',threshold:0});
+    io.observe(el);
+  });
+  updateCounter();
+
+  window.showNav=function(){
+    progress.classList.add('visible');
+    dots.classList.add('visible');
+    counter.classList.add('visible');
+  };
+})();
+
+// ===================== TIMELINE =====================
+(function(){
+  const section=document.getElementById('timeline');
+  const fill=document.getElementById('timeline-fill');
+  const dots=document.querySelectorAll('.timeline-dot');
+  const nodes=document.querySelectorAll('.timeline-node-inner');
+  let ticking=false;
+  function update(){
+    const rect=section.getBoundingClientRect(),vh=window.innerHeight;
+    const start=vh*0.85,end=-rect.height+vh*0.35,total=start-end;
+    const p=total>0?(start-rect.top)/total:0;
+    const clamped=Math.max(0,Math.min(1,p));
+    fill.style.transform=`scaleY(${clamped})`;
+    dots.forEach(dot=>{
+      const at=parseFloat(dot.dataset.at||'0');
+      dot.classList.toggle('lit',clamped>=at);
+    });
+    nodes.forEach((node,i)=>{
+      const at=parseFloat(dots[i]&&dots[i].dataset.at||'0');
+      node.classList.toggle('lit',clamped>=at);
+    });
+    ticking=false;
+  }
+  window.addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(update);}},{passive:true});
+  window.addEventListener('resize',update);
+  update();
+})();
+
+// ===================== HERO PARALLAX =====================
+(function(){
+  const title=document.getElementById('hero-title');
+  const sub=document.getElementById('hero-sub');
+  let raf=0;
+  const target={x:0,y:0},current={x:0,y:0};
+  window.addEventListener('mousemove',e=>{target.x=e.clientX/window.innerWidth-0.5;target.y=e.clientY/window.innerHeight-0.5;},{passive:true});
+  function loop(){
+    current.x+=(target.x-current.x)*0.055;current.y+=(target.y-current.y)*0.055;
+    if(title)title.style.transform=`translate3d(${current.x*-22}px,${current.y*-12}px,0)`;
+    if(sub)sub.style.transform=`translate3d(${current.x*-10}px,${current.y*-6}px,0)`;
+    raf=requestAnimationFrame(loop);
+  }
+  raf=requestAnimationFrame(loop);
+})();
+
+// ===================== LOADER =====================
+(function(){
+  const loader=document.getElementById('loader');
+  const ll1=document.getElementById('ll1');
+  const ll2=document.getElementById('ll2');
+  const ded=document.getElementById('loader-dedication');
+  const skipBtn=document.getElementById('skip-btn');
+  const main=document.getElementById('main-content');
+  const heroInner=document.getElementById('hero-inner');
+  const heroScroll=document.getElementById('hero-scroll');
+
+  const particleCanvas=document.getElementById('particle-loader-canvas');
+  let engine=null;
+  let done=false;
+
+  function resize(){
+    particleCanvas.width=window.innerWidth*(window.devicePixelRatio||1);
+    particleCanvas.height=window.innerHeight*(window.devicePixelRatio||1);
+    particleCanvas.style.width=window.innerWidth+'px';
+    particleCanvas.style.height=window.innerHeight+'px';
+  }
+  resize();
+  window.addEventListener('resize',resize);
+  engine=createParticleEngine(particleCanvas,'VEDANT',0.13,0.16);
+  engine.start();
+
+  function finish(){
+    if(done)return; done=true;
+    engine.setDissolve(true);
+    loader.classList.add('leaving');
+    skipBtn.classList.add('leaving');
+    setTimeout(()=>{
+      loader.style.display='none';
+      main.style.opacity='1';
+      document.documentElement.classList.remove('lock-scroll');
+      heroInner.classList.add('entered');
+      heroScroll.classList.add('entered');
+      window.showNav();
+      engine.stop();
+    },1400);
+  }
+
+  document.documentElement.classList.add('lock-scroll');
+  window.scrollTo(0,0);
+
+  const seq=[
+    {at:900,fn:()=>{ll1.classList.add('active');}},
+    {at:4200,fn:()=>{ll1.classList.remove('active');ll2.classList.add('active');}},
+    {at:8600,fn:()=>{ll2.classList.remove('active');ded.classList.add('active');}},
+    {at:12600,fn:()=>{ded.classList.remove('active');engine.setActive(true);}},
+    {at:18600,fn:()=>{engine.setDissolve(true);}},
+    {at:20600,fn:finish}
+  ];
+  const timers=seq.map(s=>setTimeout(()=>{if(!done)s.fn();},s.at));
+
+  skipBtn.addEventListener('click',finish);
+  window.addEventListener('keydown',e=>{if(e.key==='Escape'||e.key==='Enter'||e.key===' ')finish();});
+})();
+
+// ===================== BLACKOUT =====================
+(function(){
+  const blackout=document.getElementById('blackout');
+  const line=document.getElementById('blackout-line');
+  let shown=false;
+  const io=new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting&&!shown){shown=true;setTimeout(()=>line.classList.add('show'),2600);}
+  },{threshold:0.4});
+  io.observe(blackout);
+})();
+
+// ===================== ENDING PARTICLE TEXT =====================
+(function(){
+  const canvas=document.getElementById('particle-end-canvas');
+  let engine=null,inView=false,dissolved=false;
+  const io=new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting&&!inView){
+      inView=true;
+      engine=createParticleEngine(canvas,'STILL HERE.',0.115,0.1);
+      engine.start();
+      engine.setActive(true);
+      setTimeout(()=>{if(engine)engine.setDissolve(true);},6500);
+    }
+  },{threshold:0.45});
+  io.observe(document.getElementById('title-reformation'));
+})();
+
+// ===================== EASTER EGG =====================
+(function(){
+  const SECRETS=[
+    'You found something hidden. Of course you did — you always did notice the small things.',
+    'Somewhere in a group chat, there is a message neither of us will ever delete.',
+    'Twenty-nine seconds of silence between friends is still a conversation.'
+  ];
+  const el=document.getElementById('easter-egg');
+  const text=document.getElementById('easter-egg-text');
+  let buffer='',found=0,hideTimer=0;
+  window.addEventListener('keydown',e=>{
+    if(e.key.length!==1)return;
+    buffer=(buffer+e.key.toLowerCase()).slice(-6);
+    if(buffer==='vedant'){
+      text.textContent=SECRETS[found%SECRETS.length];
+      el.classList.add('visible');
+      found++;
+      clearTimeout(hideTimer);
+      hideTimer=setTimeout(()=>el.classList.remove('visible'),7000);
+      buffer='';
+    }
+  });
+})();
+</script>
+</body>
 </html>
